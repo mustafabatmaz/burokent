@@ -1,0 +1,16 @@
+# Project documents stay on the local machine only (KR-073)
+CLAUDE.md
+PROJECT_DECISION.md
+MEMORY.md
+DESIGN.md
+docs/
+
+# OS / editor
+.DS_Store
+.idea/
+*.iml
+
+# Environment files (secrets); only .env.example is committed
+.env
+.env.*
+!.env.example
