@@ -1,0 +1,60 @@
+spring:
+  application:
+    name: burokent
+  jpa:
+    open-in-view: false
+    hibernate:
+      ddl-auto: validate
+    properties:
+      hibernate:
+        jdbc:
+          time_zone: UTC
+  liquibase:
+    change-log: classpath:db/changelog/db.changelog-master.yaml
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health
+  endpoint:
+    health:
+      show-details: never
+
+springdoc:
+  swagger-ui:
+    enabled: false
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev | prod
+  datasource:
+    url: ${DB_URL}
+    username: ${DB_APP_USER}
+    password: ${DB_APP_PASSWORD}
+  liquibase:
+    user: ${DB_OWNER_USER}
+    password: ${DB_OWNER_PASSWORD}
+
+---
+spring:
+  config:
+    activate:
+      on-profile: dev
+springdoc:
+  swagger-ui:
+    enabled: true
+logging:
+  level:
+    com.burokent: debug
+
+---
+spring:
+  config:
+    activate:
+      on-profile: prod
+springdoc:
+  api-docs:
+    enabled: false
