@@ -22,11 +22,11 @@ class ApplicationStartupTests {
     JdbcTemplate jdbc;
 
     @Test
-    void runsLiquibaseOnStartup() {
-        Integer changelogTables = jdbc.queryForObject(
-                "select count(*) from information_schema.tables where table_name = 'databasechangelog'", Integer.class);
+    void runsLiquibaseAsSchemaOwner() {
+        String changelogOwner = jdbc.queryForObject(
+                "select tableowner from pg_catalog.pg_tables where tablename = 'databasechangelog'", String.class);
 
-        assertThat(changelogTables).isEqualTo(1);
+        assertThat(changelogOwner).isEqualTo(TestcontainersConfiguration.OWNER_USER);
     }
 
     @Test
