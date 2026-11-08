@@ -1,1 +1,4 @@
-databaseChangeLog: []
+databaseChangeLog:
+  - include:
+      file: shared/001-app-default-privileges.yaml
+      relativeToChangelogFile: true
