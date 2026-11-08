@@ -11,6 +11,9 @@ spring:
           time_zone: UTC
   liquibase:
     change-log: classpath:db/changelog/db.changelog-master.yaml
+    parameters:
+      owner_user: ${spring.liquibase.user}
+      app_user: ${spring.datasource.username}
 
 management:
   endpoints:
