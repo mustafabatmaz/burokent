@@ -1,0 +1,29 @@
+/*
+ * Design tokens of the public site. Import after "tailwindcss":
+ *   @import "tailwindcss";
+ *   @import "@burokent/tokens/public.css";
+ * The font variables (--font-playfair, --font-amiri, --font-cairo, --font-cinzel) are set by next/font in the app.
+ */
+@theme {
+  --color-night: #0f0d0a;
+  --color-night-raised: #16130e;
+  --color-line: #3a3220;
+  --color-walnut: #2a1b12;
+  --color-gold: #c9a24a;
+  --color-gold-light: #d9b45a;
+  --color-gold-dark: #7a5c1e;
+  --color-emerald: #1f3a2e;
+  --color-cream: #f3ebdd;
+  --color-ivory: #efe6d2;
+  --color-sand: #b5a989;
+  --color-cognac: #8a4a22;
+  --color-success: #2f6b3f;
+  --color-warning: #8a5a00;
+  --color-error: #a12b2b;
+  --color-info: #1f5a8a;
+
+  --font-heading: var(--font-playfair), "Playfair Display", serif;
+  --font-heading-ar: var(--font-amiri), "Amiri", serif;
+  --font-body: var(--font-cairo), "Cairo", sans-serif;
+  --font-label: var(--font-cinzel), "Cinzel", serif;
+}
