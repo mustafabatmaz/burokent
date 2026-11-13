@@ -1,4 +1,5 @@
-# Weekly update pull requests, one per ecosystem, so they arrive together and can be checked together
+# Weekly updates. Minor and patch updates arrive as one grouped pull request per ecosystem; major updates arrive
+# one by one, so each can be judged on its own. Versions pinned on purpose ignore their major updates below.
 version: 2
 updates:
   - package-ecosystem: maven
@@ -7,7 +8,7 @@ updates:
       interval: weekly
     groups:
       backend:
-        patterns: ["*"]
+        update-types: [minor, patch]
 
   - package-ecosystem: npm
     directory: /frontend
@@ -15,7 +16,17 @@ updates:
       interval: weekly
     groups:
       frontend:
-        patterns: ["*"]
+        update-types: [minor, patch]
+    ignore:
+      # typescript-eslint and openapi-typescript do not support TypeScript 7 yet
+      - dependency-name: typescript
+        update-types: ["version-update:semver-major"]
+      # Node types follow the Node version the apps run on (24, LTS)
+      - dependency-name: "@types/node"
+        update-types: ["version-update:semver-major"]
+      # Version 9 changed the API; moving to it is its own piece of work
+      - dependency-name: "@tanstack/react-table"
+        update-types: ["version-update:semver-major"]
 
   - package-ecosystem: github-actions
     directory: /
@@ -23,7 +34,7 @@ updates:
       interval: weekly
     groups:
       actions:
-        patterns: ["*"]
+        update-types: [minor, patch]
 
   - package-ecosystem: docker
     directories:
@@ -34,4 +45,13 @@ updates:
       interval: weekly
     groups:
       images:
-        patterns: ["*"]
+        update-types: [minor, patch]
+    ignore:
+      # Long-term support lines only: Java 21 and Node 24 until the next LTS is chosen deliberately
+      - dependency-name: eclipse-temurin
+        update-types: ["version-update:semver-major"]
+      - dependency-name: node
+        update-types: ["version-update:semver-major"]
+      # nginx's stable line has an even minor version (1.30); odd ones are mainline
+      - dependency-name: nginxinc/nginx-unprivileged
+        update-types: ["version-update:semver-minor"]
