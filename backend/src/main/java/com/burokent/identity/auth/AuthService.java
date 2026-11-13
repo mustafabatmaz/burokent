@@ -76,8 +76,7 @@ class AuthService {
 
         limiter.recordSuccess(username, ip);
         Instant now = clock.instant();
-        return startSession(
-                user.get().getId(), UUID.randomUUID(), now.plus(properties.refreshTokenTtl()), ip, userAgent);
+        return startSession(user.get(), UUID.randomUUID(), now.plus(properties.refreshTokenTtl()), ip, userAgent);
     }
 
     @Transactional(noRollbackFor = InvalidSessionException.class)
@@ -89,15 +88,13 @@ class AuthService {
             refreshTokens.revokeFamily(current.getFamilyId(), now);
             throw new InvalidSessionException();
         }
-        boolean userActive = users.findById(current.getUserId())
-                .filter(user -> !user.isArchived())
-                .isPresent();
-        if (current.isExpired(now) || !userActive) {
+        Optional<User> user = users.findById(current.getUserId()).filter(candidate -> !candidate.isArchived());
+        if (current.isExpired(now) || user.isEmpty()) {
             throw new InvalidSessionException();
         }
 
         current.revoke(now);
-        return startSession(current.getUserId(), current.getFamilyId(), current.getExpiresAt(), ip, userAgent);
+        return startSession(user.get(), current.getFamilyId(), current.getExpiresAt(), ip, userAgent);
     }
 
     @Transactional
@@ -105,13 +102,13 @@ class AuthService {
         findToken(rawRefreshToken).ifPresent(token -> refreshTokens.revokeFamily(token.getFamilyId(), clock.instant()));
     }
 
-    private Session startSession(long userId, UUID familyId, Instant expiresAt, String ip, @Nullable String userAgent) {
+    private Session startSession(User user, UUID familyId, Instant expiresAt, String ip, @Nullable String userAgent) {
         Instant now = clock.instant();
         String rawRefreshToken = newRefreshToken();
-        refreshTokens.save(
-                new RefreshToken(userId, hash(rawRefreshToken), familyId, now, expiresAt, truncate(userAgent), ip));
+        refreshTokens.save(new RefreshToken(
+                user.getId(), hash(rawRefreshToken), familyId, now, expiresAt, truncate(userAgent), ip));
         return new Session(
-                accessTokens.issue(userId),
+                accessTokens.issue(user.getId(), user.getSessionVersion()),
                 properties.accessTokenTtl(),
                 rawRefreshToken,
                 Duration.between(now, expiresAt));

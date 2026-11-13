@@ -1,5 +1,6 @@
 package com.burokent.shared.web;
 
+import com.burokent.shared.ProblemException;
 import java.util.List;
 import java.util.Locale;
 import java.util.Map;
@@ -9,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
 import org.springframework.http.ProblemDetail;
 import org.springframework.http.ResponseEntity;
+import org.springframework.orm.ObjectOptimisticLockingFailureException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
+import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.context.request.WebRequest;
 import org.springframework.web.servlet.mvc.method.annotation.ResponseEntityExceptionHandler;
@@ -34,6 +37,26 @@ class ApiExceptionHandler extends ResponseEntityExceptionHandler {
                 .toList();
         problem.setProperty(ERRORS, errors);
         return handleExceptionInternal(ex, problem, headers, status, request);
+    }
+
+    @ExceptionHandler(ProblemException.class)
+    ResponseEntity<ProblemDetail> handleProblem(ProblemException ex) {
+        ProblemDetail problem = ProblemDetail.forStatus(ex.status());
+        problem.setProperty(CODE, ex.code());
+        if (!ex.errors().isEmpty()) {
+            problem.setProperty(
+                    ERRORS,
+                    ex.errors().stream()
+                            .map(error -> Map.of("field", error.field(), CODE, error.code()))
+                            .toList());
+        }
+        return ResponseEntity.status(ex.status()).body(problem);
+    }
+
+    /** Someone else saved the record first (JPA version check). */
+    @ExceptionHandler(ObjectOptimisticLockingFailureException.class)
+    ResponseEntity<ProblemDetail> handleOptimisticLock() {
+        return handleProblem(new ProblemException(HttpStatus.CONFLICT, "conflict"));
     }
 
     @Override
