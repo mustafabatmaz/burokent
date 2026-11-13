@@ -262,19 +262,19 @@ export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
         AuditEventView: {
-            action?: string;
+            action: string;
             actorName?: string;
             /** Format: int64 */
             actorUserId?: number;
-            changes?: components["schemas"]["ChangeView"][];
+            changes: components["schemas"]["ChangeView"][];
             entityId?: string;
             entityLabel?: string;
-            entityType?: string;
+            entityType: string;
             /** Format: int64 */
-            id?: number;
+            id: number;
             ip?: string;
             /** Format: date-time */
-            occurredAt?: string;
+            occurredAt: string;
             requestId?: string;
             userAgent?: string;
         };
@@ -283,8 +283,8 @@ export interface components {
             newPassword: string;
         };
         ChangeView: {
-            field?: string;
-            masked?: boolean;
+            field: string;
+            masked: boolean;
             new?: string;
             old?: string;
         };
@@ -305,12 +305,12 @@ export interface components {
             username: string;
         };
         MeResponse: {
-            displayName?: string;
+            displayName: string;
             /** Format: int64 */
-            id?: number;
-            permissions?: string[];
-            superAdmin?: boolean;
-            username?: string;
+            id: number;
+            permissions: string[];
+            superAdmin: boolean;
+            username: string;
         };
         PageMetadata: {
             /** Format: int64 */
@@ -327,8 +327,8 @@ export interface components {
             page: components["schemas"]["PageMetadata"];
         };
         PermissionDefinition: {
-            code?: string;
-            delegable?: boolean;
+            code: string;
+            delegable: boolean;
         };
         ResetPasswordRequest: {
             password: string;
@@ -336,37 +336,37 @@ export interface components {
         RoleView: {
             description?: string;
             /** Format: int64 */
-            id?: number;
-            name?: string;
-            permissions?: string[];
+            id: number;
+            name: string;
+            permissions: string[];
             /** Format: int64 */
-            version?: number;
+            version: number;
         };
         UpdateRoleRequest: {
             description?: string;
             name: string;
             permissions: string[];
             /** Format: int64 */
-            version?: number;
+            version: number;
         };
         UpdateUserRequest: {
             displayName: string;
             /** Format: int64 */
             roleId?: number;
             /** Format: int64 */
-            version?: number;
+            version: number;
         };
         UserView: {
-            archived?: boolean;
-            displayName?: string;
+            archived: boolean;
+            displayName: string;
             /** Format: int64 */
-            id?: number;
+            id: number;
             /** Format: int64 */
             roleId?: number;
-            superAdmin?: boolean;
-            username?: string;
+            superAdmin: boolean;
+            username: string;
             /** Format: int64 */
-            version?: number;
+            version: number;
         };
     };
     responses: never;

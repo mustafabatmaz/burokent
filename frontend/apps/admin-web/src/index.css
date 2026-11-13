@@ -1,0 +1,33 @@
+@import "tailwindcss";
+@import "@burokent/tokens/admin.css";
+@import "@fontsource-variable/inter";
+
+:root {
+  --font-inter: "Inter Variable";
+  color-scheme: light;
+}
+
+.dark {
+  color-scheme: dark;
+}
+
+@layer base {
+  html {
+    font-size: 16px;
+  }
+
+  body {
+    @apply bg-background text-foreground font-sans antialiased;
+    font-variant-numeric: tabular-nums;
+  }
+
+  *,
+  ::before,
+  ::after {
+    @apply border-border;
+  }
+
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-ring;
+  }
+}
