@@ -46,6 +46,7 @@
             "type" : "string"
           }
         },
+        "required" : [ "action", "changes", "entityType", "id", "occurredAt" ],
         "type" : "object"
       },
       "ChangePasswordRequest" : {
@@ -77,6 +78,7 @@
             "type" : "string"
           }
         },
+        "required" : [ "field", "masked" ],
         "type" : "object"
       },
       "CreateRoleRequest" : {
@@ -161,6 +163,7 @@
             "type" : "string"
           }
         },
+        "required" : [ "displayName", "id", "permissions", "superAdmin", "username" ],
         "type" : "object"
       },
       "PageMetadata" : {
@@ -209,6 +212,7 @@
             "type" : "boolean"
           }
         },
+        "required" : [ "code", "delegable" ],
         "type" : "object"
       },
       "ResetPasswordRequest" : {
@@ -244,6 +248,7 @@
             "type" : "integer"
           }
         },
+        "required" : [ "id", "name", "permissions", "version" ],
         "type" : "object"
       },
       "UpdateRoleRequest" : {
@@ -270,7 +275,7 @@
             "type" : "integer"
           }
         },
-        "required" : [ "name", "permissions" ],
+        "required" : [ "name", "permissions", "version" ],
         "type" : "object"
       },
       "UpdateUserRequest" : {
@@ -289,7 +294,7 @@
             "type" : "integer"
           }
         },
-        "required" : [ "displayName" ],
+        "required" : [ "displayName", "version" ],
         "type" : "object"
       },
       "UserView" : {
@@ -319,6 +324,7 @@
             "type" : "integer"
           }
         },
+        "required" : [ "archived", "displayName", "id", "superAdmin", "username", "version" ],
         "type" : "object"
       }
     }
