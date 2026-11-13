@@ -9,6 +9,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import com.burokent.TestcontainersConfiguration;
+import com.burokent.audit.AuditPermissions;
 import com.jayway.jsonpath.JsonPath;
 import jakarta.servlet.http.Cookie;
 import java.util.UUID;
@@ -198,11 +199,13 @@ class IdentityManagementTests {
         Cookie manager = login(createUser(managerRoleId), PASSWORD).getCookie(ACCESS_COOKIE);
 
         call(get("/api/admin/me"), manager)
-                .andExpect(jsonPath("$.permissions[0]").value(IdentityPermissions.READ));
+                .andExpect(jsonPath("$.permissions")
+                        .value(org.hamcrest.Matchers.containsInAnyOrder(
+                                AuditPermissions.READ, IdentityPermissions.READ)));
         call(get("/api/admin/me"), superAdmin)
                 .andExpect(jsonPath("$.permissions")
                         .value(org.hamcrest.Matchers.containsInAnyOrder(
-                                IdentityPermissions.MANAGE, IdentityPermissions.READ)));
+                                AuditPermissions.READ, IdentityPermissions.MANAGE, IdentityPermissions.READ)));
     }
 
     private String createUser(@Nullable Long roleId) throws Exception {

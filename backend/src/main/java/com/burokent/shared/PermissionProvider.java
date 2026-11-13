@@ -1,4 +1,4 @@
-package com.burokent.identity;
+package com.burokent.shared;
 
 import java.util.List;
 

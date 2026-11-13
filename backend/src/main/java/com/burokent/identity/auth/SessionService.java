@@ -1,5 +1,6 @@
 package com.burokent.identity.auth;
 
+import com.burokent.audit.NotAudited;
 import java.time.Clock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -13,6 +14,7 @@ public class SessionService {
     private final RefreshTokenRepository refreshTokens;
     private final Clock clock;
 
+    @NotAudited("only called by audited user actions")
     @Transactional
     public void revokeAll(long userId) {
         refreshTokens.revokeAllForUser(userId, clock.instant());

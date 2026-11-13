@@ -1,7 +1,7 @@
 package com.burokent.identity.access;
 
 import com.burokent.identity.IdentityPermissions;
-import com.burokent.identity.PermissionDefinition;
+import com.burokent.shared.PermissionDefinition;
 import java.util.List;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.access.prepost.PreAuthorize;

@@ -1,7 +1,7 @@
 package com.burokent.identity.access;
 
-import com.burokent.identity.PermissionDefinition;
-import com.burokent.identity.PermissionProvider;
+import com.burokent.shared.PermissionDefinition;
+import com.burokent.shared.PermissionProvider;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;

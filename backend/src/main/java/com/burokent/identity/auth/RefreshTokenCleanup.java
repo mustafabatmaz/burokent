@@ -1,5 +1,6 @@
 package com.burokent.identity.auth;
 
+import com.burokent.audit.NotAudited;
 import java.time.Clock;
 import lombok.RequiredArgsConstructor;
 import org.springframework.scheduling.annotation.Scheduled;
@@ -14,6 +15,7 @@ class RefreshTokenCleanup {
     private final Clock clock;
 
     @Scheduled(cron = "0 0 4 * * *", zone = "UTC")
+    @NotAudited("housekeeping of expired tokens")
     @Transactional
     void deleteExpiredTokens() {
         refreshTokens.deleteExpired(clock.instant());

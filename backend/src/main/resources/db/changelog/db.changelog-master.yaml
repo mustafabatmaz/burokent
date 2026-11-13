@@ -20,3 +20,9 @@ databaseChangeLog:
   - include:
       file: identity/006-insert-manager-role.yaml
       relativeToChangelogFile: true
+  - include:
+      file: audit/001-create-audit-events.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: audit/002-insert-audit-permission.yaml
+      relativeToChangelogFile: true
