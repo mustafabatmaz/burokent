@@ -25,7 +25,13 @@ export function AppLayout() {
   const [tabletOpen, setTabletOpen] = useState(false);
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
   const location = useLocation();
-  const title = groups.flatMap((group) => group.items).find((item) => item.to === location.pathname)?.label;
+  const title = groups
+    .flatMap((group) => group.items)
+    .find((item) =>
+      item.to === "/"
+        ? location.pathname === "/"
+        : location.pathname === item.to || location.pathname.startsWith(`${item.to}/`),
+    )?.label;
 
   // Labels are hidden in icon mode but stay readable for screen readers
   const labelClassName = cn(!tabletOpen && "md:max-lg:sr-only", !expanded && "lg:sr-only");

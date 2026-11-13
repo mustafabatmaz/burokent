@@ -2,6 +2,7 @@ import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { useState } from "react";
 import { RouterProvider, type RouterProviderProps } from "react-router";
 import { meQuery } from "./auth/session.tsx";
+import { Toaster } from "./components/Toaster.tsx";
 import { onSessionExpired } from "./lib/api.ts";
 import { ThemeContext, useTheme } from "./theme/theme.ts";
 
@@ -20,7 +21,9 @@ export function AppProviders({ router }: { router: RouterProviderProps["router"]
   return (
     <QueryClientProvider client={queryClient}>
       <ThemeContext value={theme}>
-        <RouterProvider router={router} />
+        <Toaster>
+          <RouterProvider router={router} />
+        </Toaster>
       </ThemeContext>
     </QueryClientProvider>
   );

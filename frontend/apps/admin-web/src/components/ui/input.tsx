@@ -5,7 +5,7 @@ export function Input({ className, ...props }: ComponentProps<"input">) {
   return (
     <input
       className={cn(
-        "h-12 w-full rounded-lg border border-input bg-card px-3 text-base placeholder:text-muted-foreground aria-invalid:border-destructive",
+        "h-12 w-full rounded-lg border border-input bg-card px-3 text-base placeholder:text-muted-foreground disabled:cursor-not-allowed disabled:bg-muted disabled:text-muted-foreground aria-invalid:border-destructive",
         className,
       )}
       {...props}

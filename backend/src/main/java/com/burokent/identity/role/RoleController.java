@@ -56,6 +56,12 @@ class RoleController {
         return roles.list().stream().map(RoleView::of).toList();
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + IdentityPermissions.READ + "')")
+    RoleView get(@PathVariable long id) {
+        return RoleView.of(roles.get(id));
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize("hasAuthority('" + IdentityPermissions.MANAGE + "')")

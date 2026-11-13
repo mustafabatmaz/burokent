@@ -1,5 +1,6 @@
 import { Menu } from "@base-ui/react/menu";
-import { LogOut } from "lucide-react";
+import { KeyRound, LogOut } from "lucide-react";
+import { useNavigate } from "react-router";
 import { useLogout, useSession } from "../auth/session.tsx";
 import { buttonVariants } from "../components/ui/button.tsx";
 import { cn } from "../lib/cn.ts";
@@ -17,6 +18,7 @@ function initials(name: string): string {
 export function UserMenu() {
   const me = useSession();
   const logout = useLogout();
+  const navigate = useNavigate();
   return (
     <Menu.Root>
       <Menu.Trigger
@@ -36,6 +38,13 @@ export function UserMenu() {
               <p className="text-xs text-muted-foreground">{me.username}</p>
             </div>
             <Menu.Separator className="my-1 h-px bg-border" />
+            <Menu.Item
+              onClick={() => void navigate("/hesap/sifre")}
+              className="flex min-h-11 cursor-default items-center gap-2 rounded-md px-2 text-sm outline-none data-highlighted:bg-accent"
+            >
+              <KeyRound className="size-4" aria-hidden />
+              {messages.account.changePassword}
+            </Menu.Item>
             <Menu.Item
               onClick={() => void logout()}
               className="flex min-h-11 cursor-default items-center gap-2 rounded-md px-2 text-sm outline-none data-highlighted:bg-accent"
