@@ -59,7 +59,7 @@ infra/       Docker Compose for development, PostgreSQL init script
 - [x] Activity log
 - [x] Frontend workspace (design tokens, generated API client, RTL lint rule)
 - [x] Admin panel shell (login, layout for desktop, tablet and phone, light and dark theme)
-- [ ] Admin panel: users, roles and activity log screens
+- [x] Admin panel: users, roles and activity log screens
 - [ ] Public website skeleton (three languages, RTL)
 - [ ] CI and production setup
 - [ ] Catalogue, quote requests and the public website's content

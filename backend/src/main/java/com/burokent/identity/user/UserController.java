@@ -67,6 +67,12 @@ class UserController {
         return users.list().stream().map(UserView::of).toList();
     }
 
+    @GetMapping("/{id}")
+    @PreAuthorize("hasAuthority('" + IdentityPermissions.READ + "')")
+    UserView get(@PathVariable long id) {
+        return UserView.of(users.get(id));
+    }
+
     @PostMapping
     @ResponseStatus(HttpStatus.CREATED)
     @PreAuthorize(MANAGE)

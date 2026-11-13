@@ -30,6 +30,11 @@ class RoleService {
         return roles.findAllByOrderByNameAsc();
     }
 
+    @Transactional(readOnly = true)
+    Role get(long id) {
+        return roles.findById(id).orElseThrow(() -> new ProblemException(HttpStatus.NOT_FOUND, "not_found"));
+    }
+
     @Transactional
     Role create(String name, @Nullable String description, Set<String> permissions) {
         String trimmed = name.trim();

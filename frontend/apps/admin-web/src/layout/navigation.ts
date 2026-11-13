@@ -1,4 +1,4 @@
-import { LayoutDashboard, type LucideIcon } from "lucide-react";
+import { History, LayoutDashboard, Users, type LucideIcon } from "lucide-react";
 import { messages } from "../messages.ts";
 
 export interface NavItem {
@@ -34,6 +34,14 @@ export const NAVIGATION: NavGroup[] = [
         tab: true,
         tabLabel: messages.layout.dashboardTab,
       },
+    ],
+  },
+  {
+    id: "system",
+    label: messages.layout.groups.system,
+    items: [
+      { to: "/kullanicilar", label: messages.users.title, icon: Users, permission: "identity.read" },
+      { to: "/aktivite", label: messages.audit.title, icon: History, permission: "audit.read" },
     ],
   },
 ];

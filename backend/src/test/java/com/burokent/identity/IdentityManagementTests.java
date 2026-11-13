@@ -194,6 +194,26 @@ class IdentityManagementTests {
     }
 
     @Test
+    void usersAndRolesCanBeReadOneByOne() throws Exception {
+        String username = createUser(null);
+        long userId = userId(username);
+        long roleId = id(call(post("/api/admin/roles").content(role("Single " + UUID.randomUUID())), superAdmin)
+                .andExpect(status().isCreated()));
+
+        call(get("/api/admin/users/" + userId), superAdmin)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.username").value(username))
+                .andExpect(jsonPath("$.version").value(0));
+        call(get("/api/admin/roles/" + roleId), superAdmin)
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.id").value(roleId));
+        call(get("/api/admin/users/999999"), superAdmin)
+                .andExpect(status().isNotFound())
+                .andExpect(jsonPath("$.code").value("not_found"));
+        call(get("/api/admin/roles/999999"), superAdmin).andExpect(status().isNotFound());
+    }
+
+    @Test
     void meListsTheEffectivePermissions() throws Exception {
         Long managerRoleId = jdbc.queryForObject("select id from roles where name = 'Yönetici'", Long.class);
         Cookie manager = login(createUser(managerRoleId), PASSWORD).getCookie(ACCESS_COOKIE);

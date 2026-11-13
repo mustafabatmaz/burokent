@@ -37,6 +37,11 @@ class UserManagementService {
         return users.findAllByOrderByUsernameAsc();
     }
 
+    @Transactional(readOnly = true)
+    User get(long id) {
+        return users.findById(id).orElseThrow(() -> new ProblemException(HttpStatus.NOT_FOUND, "not_found"));
+    }
+
     @Transactional
     User create(String rawUsername, String displayName, String password, @Nullable Long roleId) {
         String username = rawUsername.trim().toLowerCase(Locale.ROOT);
