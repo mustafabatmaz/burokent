@@ -49,8 +49,10 @@ The edge Caddy's main Caddyfile is expected to:
 - define a `(common)` snippet (HSTS, no `Server` header),
 - define a `(burokent_tls)` snippet that loads the site's certificate (`tls <cert file> <key file>`; the files stay
   on the server), so no certificate is requested automatically for these sites,
-- trust Cloudflare's addresses for the client IP (`servers { trusted_proxies static <Cloudflare ranges> }`), and
-- read `caddy/burokent.caddy` with `import sites/*.caddy` (mount this folder's file into `sites/`).
+- trust Cloudflare's addresses for the client IP and read `X-Forwarded-For` from the right, so a value the client
+  wrote there is ignored (`servers { trusted_proxies static <Cloudflare ranges>` and `trusted_proxies_strict }`), and
+- read this folder's `caddy/` with `import sites/burokent/*.caddy`, the folder mounted read-only at
+  `sites/burokent/` (a folder rather than the file, so a `git pull` is seen).
 
 The client address then travels as `X-Forwarded-For`: Caddy → the admin panel's nginx (trusts Docker's private
 networks) → the backend (Tomcat trusts private networks), so the login rate limit and the activity log see the
