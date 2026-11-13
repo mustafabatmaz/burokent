@@ -1,0 +1,41 @@
+# Creates the first super admin from changelog parameters (username + {bcrypt} password hash).
+# Runs once; halts the migration when the parameters are missing or malformed.
+databaseChangeLog:
+  - changeSet:
+      id: identity-003
+      author: burokent
+      preConditions:
+        - onFail: HALT
+        - onFailMessage: >-
+            bootstrap super admin parameters are missing or invalid:
+            set BOOTSTRAP_ADMIN_USERNAME (lowercase) and BOOTSTRAP_ADMIN_PASSWORD_HASH ({bcrypt}...)
+        - sqlCheck:
+            expectedResult: 1
+            sql: >-
+              SELECT CASE WHEN '${bootstrap_admin_username}' <> ''
+                AND '${bootstrap_admin_username}' = lower('${bootstrap_admin_username}')
+                AND '${bootstrap_admin_password_hash}' LIKE '{bcrypt}%'
+              THEN 1 ELSE 0 END
+      changes:
+        - insert:
+            tableName: users
+            columns:
+              - column:
+                  name: username
+                  value: ${bootstrap_admin_username}
+              - column:
+                  name: display_name
+                  value: ${bootstrap_admin_username}
+              - column:
+                  name: password_hash
+                  value: ${bootstrap_admin_password_hash}
+              - column:
+                  name: super_admin
+                  valueBoolean: true
+              - column:
+                  name: password_changed_at
+                  valueComputed: now()
+      rollback:
+        - delete:
+            tableName: users
+            where: username = '${bootstrap_admin_username}'

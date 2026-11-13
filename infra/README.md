@@ -27,6 +27,10 @@
 
    The backend listens on `http://localhost:8090` (Swagger UI: `/swagger-ui/index.html`).
 
+On the first start the backend creates the super admin from `BOOTSTRAP_ADMIN_USERNAME` and
+`BOOTSTRAP_ADMIN_PASSWORD_HASH` (see `.env.example` for how to generate the hash). It refuses to start while they are
+missing.
+
 The init script in `postgres/init/` only runs when the data volume is empty. After changing it, recreate the volume:
 
 ```bash
