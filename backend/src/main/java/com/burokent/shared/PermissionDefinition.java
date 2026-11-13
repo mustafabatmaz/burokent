@@ -1,4 +1,4 @@
-package com.burokent.identity;
+package com.burokent.shared;
 
 /**
  * One permission of the admin panel, written as {@code module.action}. Non-delegable permissions can never be granted

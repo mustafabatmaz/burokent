@@ -1,0 +1,85 @@
+databaseChangeLog:
+  - changeSet:
+      id: audit-001
+      author: burokent
+      changes:
+        - createTable:
+            tableName: audit_events
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  generationType: ALWAYS
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: audit_events_pkey
+              - column:
+                  name: occurred_at
+                  type: timestamptz
+                  constraints:
+                    nullable: false
+              - column:
+                  name: actor_user_id
+                  type: bigint
+              - column:
+                  name: actor_name
+                  type: varchar(128)
+              - column:
+                  name: action
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: entity_type
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: entity_id
+                  type: varchar(64)
+              - column:
+                  name: entity_label
+                  type: varchar(255)
+              - column:
+                  name: changes
+                  type: jsonb
+                  defaultValueComputed: "'[]'::jsonb"
+                  constraints:
+                    nullable: false
+              - column:
+                  name: ip
+                  type: varchar(45)
+              - column:
+                  name: user_agent
+                  type: varchar(512)
+              - column:
+                  name: request_id
+                  type: varchar(64)
+        - createIndex:
+            tableName: audit_events
+            indexName: audit_events_occurred_at_idx
+            columns:
+              - column:
+                  name: occurred_at
+        - createIndex:
+            tableName: audit_events
+            indexName: audit_events_entity_idx
+            columns:
+              - column:
+                  name: entity_type
+              - column:
+                  name: entity_id
+        - createIndex:
+            tableName: audit_events
+            indexName: audit_events_actor_user_id_idx
+            columns:
+              - column:
+                  name: actor_user_id
+        - sql:
+            sql: >-
+              REVOKE UPDATE, DELETE ON audit_events FROM "${app_user}";
+              COMMENT ON TABLE audit_events IS 'append-only'
+      rollback:
+        - dropTable:
+            tableName: audit_events

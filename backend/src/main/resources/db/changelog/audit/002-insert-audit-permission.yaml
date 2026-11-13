@@ -1,0 +1,24 @@
+databaseChangeLog:
+  - changeSet:
+      id: audit-002
+      author: burokent
+      changes:
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: code
+                  value: audit.read
+              - column:
+                  name: delegable
+                  valueBoolean: true
+        # Everyone may see everyone's activity, so the starting role gets it too
+        - sql:
+            sql: >-
+              INSERT INTO role_permissions (role_id, permission_code)
+              SELECT id, 'audit.read' FROM roles WHERE name = 'Yönetici'
+      rollback:
+        - sql:
+            sql: >-
+              DELETE FROM role_permissions WHERE permission_code = 'audit.read';
+              DELETE FROM permissions WHERE code = 'audit.read'

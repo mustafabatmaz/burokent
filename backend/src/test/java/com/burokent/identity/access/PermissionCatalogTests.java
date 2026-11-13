@@ -3,7 +3,7 @@ package com.burokent.identity.access;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import com.burokent.TestcontainersConfiguration;
-import com.burokent.identity.PermissionDefinition;
+import com.burokent.shared.PermissionDefinition;
 import java.util.Map;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.Test;
