@@ -1,0 +1,53 @@
+@import "tailwindcss";
+@import "@burokent/tokens/public.css";
+
+@layer base {
+  html {
+    background-color: var(--color-night);
+    color-scheme: dark;
+  }
+
+  body {
+    @apply bg-night font-body text-ivory antialiased;
+    font-size: 17px;
+    line-height: 1.7;
+  }
+
+  h1,
+  h2,
+  h3 {
+    @apply font-heading font-medium;
+    line-height: 1.1;
+  }
+
+  /* Arabic: Amiri headings, larger and airier body text, no letter spacing */
+  :lang(ar) body {
+    font-size: 18px;
+    line-height: 1.85;
+  }
+
+  :lang(ar) :is(h1, h2, h3) {
+    font-family: var(--font-heading-ar);
+    font-weight: 700;
+    line-height: 1.35;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-gold);
+    outline-offset: 2px;
+  }
+}
+
+@layer components {
+  /* Small capitals above headings: Cinzel in Latin scripts, Cairo semibold in Arabic */
+  .eyebrow {
+    @apply font-label text-sm text-gold uppercase;
+    letter-spacing: 0.2em;
+  }
+
+  :lang(ar) .eyebrow {
+    font-family: var(--font-body);
+    font-weight: 600;
+    letter-spacing: 0;
+  }
+}
