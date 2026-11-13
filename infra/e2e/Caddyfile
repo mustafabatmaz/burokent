@@ -10,4 +10,8 @@
 	}
 }
 
+# The server loads its origin certificate here; locally the signed certificates above are used
+(burokent_tls) {
+}
+
 import /etc/caddy/sites/*.caddy

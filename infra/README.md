@@ -47,6 +47,8 @@ sites on the same server) reaches them over the external `edge` network by the a
 The edge Caddy's main Caddyfile is expected to:
 
 - define a `(common)` snippet (HSTS, no `Server` header),
+- define a `(burokent_tls)` snippet that loads the site's certificate (`tls <cert file> <key file>`; the files stay
+  on the server), so no certificate is requested automatically for these sites,
 - trust Cloudflare's addresses for the client IP (`servers { trusted_proxies static <Cloudflare ranges> }`), and
 - read `caddy/burokent.caddy` with `import sites/*.caddy` (mount this folder's file into `sites/`).
 
