@@ -3,7 +3,7 @@
 #   docker build -f apps/admin-web/Dockerfile --build-context infra=../infra .
 
 # ---- Stage 1: build the single-page app ----
-FROM node:24-alpine AS build
+FROM node:25-alpine AS build
 WORKDIR /workspace
 # pnpm in the version package.json's packageManager names
 RUN corepack enable
@@ -18,7 +18,7 @@ RUN pnpm install --offline --frozen-lockfile \
     && pnpm --filter @burokent/admin-web build
 
 # ---- Stage 2: serve the static files with nginx, as a non-root user ----
-FROM nginxinc/nginx-unprivileged:1.30-alpine
+FROM nginxinc/nginx-unprivileged:1.31-alpine
 COPY --from=infra nginx/admin.conf /etc/nginx/conf.d/default.conf
 COPY --from=infra nginx/security-headers.conf /etc/nginx/security-headers.conf
 COPY --from=build /workspace/apps/admin-web/dist /usr/share/nginx/html

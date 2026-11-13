@@ -1,5 +1,5 @@
 # ---- Stage 1: build with the full JDK and the Maven wrapper ----
-FROM eclipse-temurin:21-jdk AS build
+FROM eclipse-temurin:24-jdk AS build
 WORKDIR /workspace
 # The server builds its own images next to the running blog: keep Maven's heap small
 ENV MAVEN_OPTS="-Xmx768m"
@@ -14,7 +14,7 @@ RUN ./mvnw -B -q package -DskipTests -Dspotless.check.skip=true \
     && java -Djarmode=tools -jar target/backend-*.jar extract --layers --launcher --destination extracted
 
 # ---- Stage 2: run with only the JRE, as a non-root user ----
-FROM eclipse-temurin:21-jre
+FROM eclipse-temurin:24-jre
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/* \

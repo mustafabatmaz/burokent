@@ -2,7 +2,7 @@
 #   docker build -f apps/public-web/Dockerfile --build-arg SITE_URL=https://example.com .
 
 # ---- Stage 1: build the standalone server ----
-FROM node:24-alpine AS build
+FROM node:25-alpine AS build
 WORKDIR /workspace
 # pnpm in the version package.json's packageManager names
 RUN corepack enable
@@ -22,7 +22,7 @@ RUN pnpm install --offline --frozen-lockfile \
     && pnpm --filter @burokent/public-web build
 
 # ---- Stage 2: run server.js as the image's non-root node user ----
-FROM node:24-alpine
+FROM node:25-alpine
 WORKDIR /app
 ENV NODE_ENV=production \
     NEXT_TELEMETRY_DISABLED=1 \
