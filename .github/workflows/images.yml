@@ -1,0 +1,39 @@
+name: Images
+
+# The server builds its own images (no registry); this only proves the Dockerfiles still build
+on:
+  push:
+    branches: [main]
+    paths:
+      - "backend/**"
+      - "frontend/**"
+      - "infra/**"
+      - ".github/workflows/images.yml"
+  pull_request:
+    paths:
+      - "backend/Dockerfile"
+      - "backend/pom.xml"
+      - "frontend/**/Dockerfile"
+      - "frontend/package.json"
+      - "frontend/pnpm-lock.yaml"
+      - "infra/**"
+      - ".github/workflows/images.yml"
+
+concurrency:
+  group: images-${{ github.ref }}
+  cancel-in-progress: true
+
+permissions:
+  contents: read
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Build the images the production compose file uses
+        working-directory: infra
+        run: |
+          cp .env.example .env
+          docker network create edge
+          docker compose -f compose.prod.yaml build

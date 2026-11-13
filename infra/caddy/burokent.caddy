@@ -1,0 +1,31 @@
+# BüroKent's sites for the shared edge Caddy, which reads this file with `import sites/*.caddy` and provides the
+# (common) snippet (HSTS, no Server header) and the Cloudflare trusted_proxies setting. The services are reached
+# over the edge network by their burokent-* aliases. The domains can be changed for a local try.
+
+{$BUROKENT_SITE_DOMAIN:burokent.com} {
+	import common
+
+	# Only the backend may ask the site to refresh pages, over the internal network; from outside it doesn't exist
+	@revalidate path /api/revalidate /api/revalidate/*
+	respond @revalidate 404
+
+	handle /api/public/* {
+		reverse_proxy burokent-backend:8080
+	}
+
+	handle {
+		reverse_proxy burokent-public-web:3000
+	}
+}
+
+# One address for the site (canonical links, sitemap): www goes to the bare domain, path kept
+www.{$BUROKENT_SITE_DOMAIN:burokent.com} {
+	import common
+	redir https://{$BUROKENT_SITE_DOMAIN:burokent.com}{uri} permanent
+}
+
+# The admin panel's nginx serves the app and passes /api to the backend
+{$BUROKENT_ADMIN_DOMAIN:panel.burokent.com} {
+	import common
+	reverse_proxy burokent-admin-web:8080
+}

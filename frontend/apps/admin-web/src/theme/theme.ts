@@ -2,7 +2,7 @@ import { createContext, useCallback, useContext, useEffect, useState } from "rea
 
 export type ThemeChoice = "light" | "dark" | "system";
 
-// Same key as the inline script in index.html, which applies the theme before the first paint
+// Same key as public/theme.js, which applies the theme before the first paint
 const STORAGE_KEY = "bk.theme";
 const DARK_QUERY = "(prefers-color-scheme: dark)";
 
