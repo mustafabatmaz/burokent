@@ -1,0 +1,25 @@
+# Starting role for day-to-day users: every delegable permission.
+databaseChangeLog:
+  - changeSet:
+      id: identity-006
+      author: burokent
+      changes:
+        - insert:
+            tableName: roles
+            columns:
+              - column:
+                  name: name
+                  value: Yönetici
+              - column:
+                  name: description
+                  value: Günlük işler; kritik işlemler hariç
+        - sql:
+            sql: >-
+              INSERT INTO role_permissions (role_id, permission_code)
+              SELECT r.id, p.code FROM roles r CROSS JOIN permissions p
+              WHERE r.name = 'Yönetici' AND p.delegable
+      rollback:
+        - sql:
+            sql: >-
+              DELETE FROM role_permissions WHERE role_id = (SELECT id FROM roles WHERE name = 'Yönetici');
+              DELETE FROM roles WHERE name = 'Yönetici'

@@ -1,0 +1,94 @@
+databaseChangeLog:
+  - changeSet:
+      id: identity-004
+      author: burokent
+      changes:
+        - createTable:
+            tableName: permissions
+            columns:
+              - column:
+                  name: code
+                  type: varchar(64)
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: permissions_pkey
+              - column:
+                  name: delegable
+                  type: boolean
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: roles
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  generationType: ALWAYS
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: roles_pkey
+              - column:
+                  name: name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: roles_name_key
+              - column:
+                  name: description
+                  type: varchar(255)
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: version
+                  type: bigint
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: role_permissions
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: role_permissions_role_id_fkey
+                    references: roles(id)
+              - column:
+                  name: permission_code
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    foreignKeyName: role_permissions_permission_code_fkey
+                    references: permissions(code)
+        - addPrimaryKey:
+            tableName: role_permissions
+            columnNames: role_id, permission_code
+            constraintName: role_permissions_pkey
+        - addColumn:
+            tableName: users
+            columns:
+              - column:
+                  name: role_id
+                  type: bigint
+                  constraints:
+                    foreignKeyName: users_role_id_fkey
+                    references: roles(id)
+              - column:
+                  name: session_version
+                  type: integer
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false

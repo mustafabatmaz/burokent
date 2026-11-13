@@ -11,3 +11,12 @@ databaseChangeLog:
   - include:
       file: identity/003-bootstrap-super-admin.yaml
       relativeToChangelogFile: true
+  - include:
+      file: identity/004-create-roles-and-permissions.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: identity/005-insert-identity-permissions.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: identity/006-insert-manager-role.yaml
+      relativeToChangelogFile: true

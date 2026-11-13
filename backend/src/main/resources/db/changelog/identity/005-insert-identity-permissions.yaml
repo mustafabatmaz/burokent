@@ -1,0 +1,27 @@
+databaseChangeLog:
+  - changeSet:
+      id: identity-005
+      author: burokent
+      changes:
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: code
+                  value: identity.manage
+              - column:
+                  name: delegable
+                  valueBoolean: false
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: code
+                  value: identity.read
+              - column:
+                  name: delegable
+                  valueBoolean: true
+      rollback:
+        - delete:
+            tableName: permissions
+            where: code in ('identity.manage', 'identity.read')

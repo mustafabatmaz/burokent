@@ -1,5 +1,6 @@
 package com.burokent.identity.auth;
 
+import com.burokent.identity.access.UserJwtAuthenticationConverter;
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import java.time.Clock;
 import java.time.Duration;
@@ -10,7 +11,7 @@ import org.springframework.boot.context.properties.EnableConfigurationProperties
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.scheduling.annotation.EnableScheduling;
-import org.springframework.security.config.Customizer;
+import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -28,12 +29,14 @@ import tools.jackson.databind.json.JsonMapper;
 @Configuration(proxyBeanMethods = false)
 @EnableConfigurationProperties(AuthProperties.class)
 @EnableScheduling
+@EnableMethodSecurity
 class SecurityConfig {
 
     private static final int MIN_SECRET_BYTES = 32;
 
     @Bean
-    SecurityFilterChain securityFilterChain(HttpSecurity http, JsonMapper jsonMapper) throws Exception {
+    SecurityFilterChain securityFilterChain(
+            HttpSecurity http, JsonMapper jsonMapper, UserJwtAuthenticationConverter jwtConverter) throws Exception {
         SecurityProblemWriter problems = new SecurityProblemWriter(jsonMapper);
         http.authorizeHttpRequests(requests -> requests.requestMatchers(
                                 "/api/public/**",
@@ -50,7 +53,7 @@ class SecurityConfig {
                 .oauth2ResourceServer(oauth2 -> oauth2.bearerTokenResolver(new AccessTokenCookieResolver())
                         .authenticationEntryPoint(problems)
                         .accessDeniedHandler(problems)
-                        .jwt(Customizer.withDefaults()))
+                        .jwt(jwt -> jwt.jwtAuthenticationConverter(jwtConverter)))
                 .exceptionHandling(exceptions ->
                         exceptions.authenticationEntryPoint(problems).accessDeniedHandler(problems))
                 .httpBasic(AbstractHttpConfigurer::disable)
