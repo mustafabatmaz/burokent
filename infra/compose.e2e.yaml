@@ -1,0 +1,20 @@
+# Added on top of compose.prod.yaml by e2e/run.sh: a local stand-in for the shared edge Caddy, with its own
+# certificates, reachable on the edge network as burokent.test and panel.burokent.test. Never used on the server.
+
+services:
+  edge:
+    image: caddy:2.11-alpine
+    environment:
+      BUROKENT_SITE_DOMAIN: burokent.test
+      BUROKENT_ADMIN_DOMAIN: panel.burokent.test
+    volumes:
+      - ./e2e/Caddyfile:/etc/caddy/Caddyfile:ro
+      - ./caddy:/etc/caddy/sites:ro
+    depends_on:
+      public-web:
+        condition: service_healthy
+      admin-web:
+        condition: service_healthy
+    networks:
+      edge:
+        aliases: [burokent.test, www.burokent.test, panel.burokent.test]

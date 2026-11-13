@@ -4,4 +4,6 @@ coverage
 .next
 pnpm-lock.yaml
 **/generated/**
+**/playwright-report/**
+**/test-results/**
 **/openapi/*.json

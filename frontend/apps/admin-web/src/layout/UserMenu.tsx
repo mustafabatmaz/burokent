@@ -21,14 +21,18 @@ export function UserMenu() {
   const navigate = useNavigate();
   return (
     <Menu.Root>
-      <Menu.Trigger
-        className={cn(buttonVariants({ variant: "ghost" }), "px-2")}
-        aria-label={messages.layout.userMenu(me.displayName)}
-      >
-        <span className="flex size-8 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-secondary-foreground">
+      {/* The name comes from the content, so it contains the visible text (WCAG 2.5.3) */}
+      <Menu.Trigger className={cn(buttonVariants({ variant: "ghost" }), "px-2")}>
+        <span
+          aria-hidden
+          className="flex size-8 items-center justify-center rounded-full bg-secondary text-xs font-semibold text-secondary-foreground"
+        >
           {initials(me.displayName)}
         </span>
-        <span className="hidden max-w-40 truncate md:inline">{me.displayName}</span>
+        <span className="sr-only">{messages.layout.userMenu(me.displayName)}</span>
+        <span aria-hidden className="hidden max-w-40 truncate md:inline">
+          {me.displayName}
+        </span>
       </Menu.Trigger>
       <Menu.Portal>
         <Menu.Positioner sideOffset={6} align="end" className="z-50">

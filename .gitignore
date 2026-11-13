@@ -23,3 +23,7 @@ next-env.d.ts
 
 # Local preview configuration
 .claude/launch.json
+
+# Playwright output
+frontend/e2e/test-results/
+frontend/e2e/playwright-report/

@@ -1,0 +1,13 @@
+# The end-to-end tests' edge Caddy: the server's edge setup in miniature, with locally signed certificates
+{
+	local_certs
+}
+
+(common) {
+	header {
+		Strict-Transport-Security "max-age=0"
+		-Server
+	}
+}
+
+import /etc/caddy/sites/*.caddy

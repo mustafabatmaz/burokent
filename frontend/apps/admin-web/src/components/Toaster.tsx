@@ -28,7 +28,10 @@ export function Toaster({ children }: { children: ReactNode }) {
     <Toast.Provider>
       {children}
       <Toast.Portal>
-        <Toast.Viewport className="fixed inset-x-4 bottom-20 z-[60] flex flex-col gap-2 md:start-auto md:end-6 md:bottom-6 md:w-96">
+        <Toast.Viewport
+          aria-label={messages.layout.notifications}
+          className="fixed inset-x-4 bottom-20 z-[60] flex flex-col gap-2 md:start-auto md:end-6 md:bottom-6 md:w-96"
+        >
           <Toasts />
         </Toast.Viewport>
       </Toast.Portal>
