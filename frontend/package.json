@@ -7,7 +7,7 @@
     "node": ">=24"
   },
   "scripts": {
-    "lint": "eslint .",
+    "lint": "pnpm --filter @burokent/public-web typegen && eslint .",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "typecheck": "tsc --noEmit -p . && pnpm -r --if-present typecheck",
