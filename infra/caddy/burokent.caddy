@@ -1,7 +1,11 @@
-# BüroKent's sites for the shared edge Caddy, which reads this file with `import sites/*.caddy` and provides the
-# (common) snippet (HSTS, no Server header), the (burokent_tls) snippet (the origin certificate) and the Cloudflare
+# BüroKent's sites for the shared edge Caddy, which reads this file with `import sites/burokent/*.caddy` and provides
+# the (common) snippet (HSTS, no Server header), the (burokent_tls) snippet (the origin certificate) and the Cloudflare
 # trusted_proxies setting. The services are reached over the edge network by their burokent-* aliases. The domains
 # can be changed for a local try.
+#
+# Every upstream gets the visitor's address alone in X-Forwarded-For. Behind Cloudflare, Caddy keeps the header it
+# trusts and appends Cloudflare's own address, so the admin nginx and Tomcat, which take the last entry, would log
+# Cloudflare instead of the visitor; {client_ip} is the address Caddy already settled on.
 
 {$BUROKENT_SITE_DOMAIN:burokent.com} {
 	import common
@@ -12,11 +16,15 @@
 	respond @revalidate 404
 
 	handle /api/public/* {
-		reverse_proxy burokent-backend:8080
+		reverse_proxy burokent-backend:8080 {
+			header_up X-Forwarded-For {client_ip}
+		}
 	}
 
 	handle {
-		reverse_proxy burokent-public-web:3000
+		reverse_proxy burokent-public-web:3000 {
+			header_up X-Forwarded-For {client_ip}
+		}
 	}
 }
 
@@ -31,5 +39,7 @@ www.{$BUROKENT_SITE_DOMAIN:burokent.com} {
 {$BUROKENT_ADMIN_DOMAIN:panel.burokent.com} {
 	import common
 	import burokent_tls
-	reverse_proxy burokent-admin-web:8080
+	reverse_proxy burokent-admin-web:8080 {
+		header_up X-Forwarded-For {client_ip}
+	}
 }
