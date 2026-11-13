@@ -20,7 +20,7 @@ parts:
 | Public site | Next.js 16 (App Router), next-intl (TR / EN / AR with right-to-left Arabic), Tailwind CSS 4 |
 | Shared | pnpm workspace, TypeScript (strict), design tokens, API client generated from OpenAPI |
 | Tests | JUnit 5, Testcontainers, MockMvc, ArchUnit, Vitest, Testing Library, MSW |
-| Infrastructure | Docker Compose |
+| Infrastructure | Docker Compose, Caddy, nginx, GitHub Actions |
 
 ## Architecture
 
@@ -48,7 +48,8 @@ frontend/    pnpm workspace
   apps/public-web/         public website (Next.js, three languages)
   packages/api-client/     OpenAPI specs, generated types, public and admin clients
   packages/tokens/         design tokens for Tailwind (public site and admin panel)
-infra/       Docker Compose for development, PostgreSQL init script
+infra/       Docker Compose (development and production), PostgreSQL init script, Caddy site file, nginx
+             config, deploy script
 ```
 
 ## Roadmap
@@ -62,7 +63,9 @@ infra/       Docker Compose for development, PostgreSQL init script
 - [x] Admin panel shell (login, layout for desktop, tablet and phone, light and dark theme)
 - [x] Admin panel: users, roles and activity log screens
 - [x] Public website skeleton (three languages, RTL)
-- [ ] CI and production setup
+- [x] CI and production setup (images, compose, Caddy, deploy script)
+- [ ] End-to-end tests (Playwright, accessibility checks)
+- [ ] Server setup
 - [ ] Catalogue, quote requests and the public website's content
 - [ ] Stock, production and suppliers
 - [ ] Quotes, sales and customer accounts
@@ -176,6 +179,18 @@ cd backend
 cd ../frontend
 pnpm generate:api
 ```
+
+## Continuous integration
+
+GitHub Actions runs the backend checks (`./mvnw verify`) when `backend/` or the committed API specs change, the
+frontend checks (lint, typecheck, format, tests, both builds) when `frontend/` changes, and builds the Docker images
+when a Dockerfile or `infra/` changes. Nothing is deployed from CI: the server builds its own images. Dependabot
+opens one grouped update pull request per ecosystem each week.
+
+## Production
+
+Everything runs in Docker behind a shared Caddy; see [infra/README.md](infra/README.md#production) for the setup, the
+deploy and rollback script and how the client address reaches the backend.
 
 ## Troubleshooting
 

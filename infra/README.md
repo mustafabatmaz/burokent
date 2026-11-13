@@ -36,3 +36,47 @@ The init script in `postgres/init/` only runs when the data volume is empty. Aft
 ```bash
 docker compose -f infra/compose.dev.yaml down -v
 ```
+
+## Production
+
+`compose.prod.yaml` runs PostgreSQL, the backend, the public site and the admin panel in containers, with memory
+limits and no published ports. A shared Caddy in front of them (its own compose project, which also serves other
+sites on the same server) reaches them over the external `edge` network by the aliases `burokent-public-web`,
+`burokent-admin-web` and `burokent-backend`; PostgreSQL is only on the internal network.
+
+The edge Caddy's main Caddyfile is expected to:
+
+- define a `(common)` snippet (HSTS, no `Server` header),
+- trust Cloudflare's addresses for the client IP (`servers { trusted_proxies static <Cloudflare ranges> }`), and
+- read `caddy/burokent.caddy` with `import sites/*.caddy` (mount this folder's file into `sites/`).
+
+The client address then travels as `X-Forwarded-For`: Caddy → the admin panel's nginx (trusts Docker's private
+networks) → the backend (Tomcat trusts private networks), so the login rate limit and the activity log see the
+visitor, not a proxy.
+
+### First setup on the server
+
+```bash
+docker network create edge                 # once, shared with the edge Caddy
+cp infra/.env.example infra/.env           # fill in every value, including SITE_URL and the bootstrap admin
+infra/deploy.sh
+```
+
+### Updating and rolling back
+
+```bash
+infra/deploy.sh             # pull, build the images one at a time, restart, wait until healthy
+infra/deploy.sh rollback    # back to the images from before the last deploy, without building
+```
+
+Database changes run when the backend starts (Liquibase). A rollback keeps the newer schema, so changesets are
+written to stay compatible with the previous version of the code (add a column first, stop using the old one later).
+
+### Trying the production stack locally
+
+Use another project name so the development database is not touched, and a local Caddy on the `edge` network:
+
+```bash
+docker network create edge
+docker compose -p burokent-prodcheck -f infra/compose.prod.yaml up -d --build --wait
+```

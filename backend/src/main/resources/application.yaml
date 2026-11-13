@@ -17,6 +17,11 @@ spring:
       bootstrap_admin_username: ${BOOTSTRAP_ADMIN_USERNAME:}
       bootstrap_admin_password_hash: ${BOOTSTRAP_ADMIN_PASSWORD_HASH:}
 
+server:
+  # Behind the proxies (edge Caddy, the admin panel's nginx) Tomcat takes the client address from
+  # X-Forwarded-For, but only when the request comes from a private network, so a client cannot fake it
+  forward-headers-strategy: native
+
 management:
   endpoints:
     web:

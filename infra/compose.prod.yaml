@@ -1,0 +1,135 @@
+# Production: everything in containers, nothing published on the host. The shared edge Caddy (its own compose
+# project) reaches the sites over the external "edge" network; PostgreSQL stays on the internal network.
+#   docker compose -f infra/compose.prod.yaml up -d      (or infra/deploy.sh)
+# Memory limits keep this stack, the blog and the image builds within the server's 8 GB.
+name: burokent
+
+x-logging: &logging
+  driver: json-file
+  options:
+    max-size: "10m"
+    max-file: "3"
+
+services:
+  postgres:
+    image: postgres:18-alpine
+    restart: unless-stopped
+    command: ["postgres", "-c", "shared_buffers=128MB", "-c", "max_connections=50"]
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:?}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:?}
+      DB_OWNER_USER: ${DB_OWNER_USER:?}
+      DB_OWNER_PASSWORD: ${DB_OWNER_PASSWORD:?}
+      DB_APP_USER: ${DB_APP_USER:?}
+      DB_APP_PASSWORD: ${DB_APP_PASSWORD:?}
+    volumes:
+      - pgdata:/var/lib/postgresql
+      - ./postgres/init:/docker-entrypoint-initdb.d:ro
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U postgres -d $${POSTGRES_DB}"]
+      interval: 5s
+      timeout: 3s
+      retries: 10
+    networks: [internal]
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+    logging: *logging
+
+  backend:
+    image: burokent-backend:latest
+    build:
+      context: ../backend
+    restart: unless-stopped
+    environment:
+      SPRING_PROFILES_ACTIVE: prod
+      DB_URL: jdbc:postgresql://postgres:5432/${POSTGRES_DB:?}
+      DB_OWNER_USER: ${DB_OWNER_USER:?}
+      DB_OWNER_PASSWORD: ${DB_OWNER_PASSWORD:?}
+      DB_APP_USER: ${DB_APP_USER:?}
+      DB_APP_PASSWORD: ${DB_APP_PASSWORD:?}
+      JWT_SECRET: ${JWT_SECRET:?}
+      # Only needed for the very first start, which creates the super admin
+      BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-}
+      BOOTSTRAP_ADMIN_PASSWORD_HASH: ${BOOTSTRAP_ADMIN_PASSWORD_HASH:-}
+    depends_on:
+      postgres:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:8080/actuator/health"]
+      interval: 10s
+      timeout: 5s
+      retries: 12
+      start_period: 40s
+    networks:
+      internal:
+      edge:
+        aliases: [burokent-backend]
+    deploy:
+      resources:
+        limits:
+          memory: 1g
+    logging: *logging
+
+  public-web:
+    image: burokent-public-web:latest
+    build:
+      context: ../frontend
+      dockerfile: apps/public-web/Dockerfile
+      args:
+        # Pages are rendered at build time with their canonical and hreflang addresses
+        SITE_URL: ${SITE_URL:-https://burokent.com}
+    restart: unless-stopped
+    healthcheck:
+      # 127.0.0.1: "localhost" could resolve to ::1
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:3000/tr"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+      start_period: 10s
+    networks:
+      internal:
+      edge:
+        aliases: [burokent-public-web]
+    deploy:
+      resources:
+        limits:
+          memory: 512m
+    logging: *logging
+
+  admin-web:
+    image: burokent-admin-web:latest
+    build:
+      context: ../frontend
+      dockerfile: apps/admin-web/Dockerfile
+      # The nginx config lives here in infra/
+      additional_contexts:
+        infra: .
+    restart: unless-stopped
+    depends_on:
+      backend:
+        condition: service_healthy
+    healthcheck:
+      test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
+      interval: 10s
+      timeout: 5s
+      retries: 3
+    networks:
+      internal:
+      edge:
+        aliases: [burokent-admin-web]
+    deploy:
+      resources:
+        limits:
+          memory: 64m
+    logging: *logging
+
+networks:
+  internal: {}
+  # Created once on the server: docker network create edge
+  edge:
+    external: true
+
+volumes:
+  pgdata:

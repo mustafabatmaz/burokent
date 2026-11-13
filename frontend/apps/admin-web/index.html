@@ -7,18 +7,7 @@
     <link rel="icon" href="/brand/favicon.ico" sizes="48x48" />
     <link rel="apple-touch-icon" href="/brand/ikon-180.png" />
     <title>BüroKent Panel</title>
-    <script>
-      // Apply the stored theme before the first paint, so dark mode does not flash white
-      (function () {
-        var choice = "system";
-        try {
-          choice = localStorage.getItem("bk.theme") || "system";
-        } catch (e) {}
-        var dark =
-          choice === "dark" || (choice === "system" && window.matchMedia("(prefers-color-scheme: dark)").matches);
-        document.documentElement.classList.toggle("dark", dark);
-      })();
-    </script>
+    <script src="/theme.js"></script>
   </head>
   <body>
     <div id="root"></div>
