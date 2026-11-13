@@ -1,5 +1,6 @@
 package com.burokent.identity.auth;
 
+import io.swagger.v3.oas.annotations.Parameter;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
 import jakarta.validation.constraints.NotBlank;
@@ -26,7 +27,7 @@ class AuthController {
 
     /** Makes sure the XSRF-TOKEN cookie is set before the first state-changing request. */
     @GetMapping("/csrf")
-    ResponseEntity<Void> csrf(CsrfToken token) {
+    ResponseEntity<Void> csrf(@Parameter(hidden = true) CsrfToken token) {
         token.getToken();
         return ResponseEntity.noContent().build();
     }
@@ -39,14 +40,16 @@ class AuthController {
 
     @PostMapping("/refresh")
     ResponseEntity<Void> refresh(
-            @CookieValue(name = AuthCookies.REFRESH, required = false) @Nullable String refreshToken,
+            @Parameter(hidden = true) @CookieValue(name = AuthCookies.REFRESH, required = false) @Nullable
+                    String refreshToken,
             HttpServletRequest http) {
         return withSession(auth.refresh(refreshToken, http.getRemoteAddr(), http.getHeader(HttpHeaders.USER_AGENT)));
     }
 
     @PostMapping("/logout")
     ResponseEntity<Void> logout(
-            @CookieValue(name = AuthCookies.REFRESH, required = false) @Nullable String refreshToken) {
+            @Parameter(hidden = true) @CookieValue(name = AuthCookies.REFRESH, required = false) @Nullable
+                    String refreshToken) {
         auth.logout(refreshToken);
         return ResponseEntity.noContent()
                 .header(HttpHeaders.SET_COOKIE, AuthCookies.clearAccess().toString())
