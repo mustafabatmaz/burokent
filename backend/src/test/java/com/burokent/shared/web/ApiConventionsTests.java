@@ -1,6 +1,8 @@
 package com.burokent.shared.web;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.jwt;
 
 import com.burokent.TestcontainersConfiguration;
 import jakarta.validation.Valid;
@@ -29,6 +31,8 @@ class ApiConventionsTests {
     void validationErrorIsProblemDetailWithCodes() {
         assertThat(mvc.post()
                         .uri("/api/admin/probe")
+                        .with(jwt())
+                        .with(csrf())
                         .contentType(MediaType.APPLICATION_JSON)
                         .content("{\"name\": \"\"}"))
                 .hasStatus(400)
@@ -46,7 +50,8 @@ class ApiConventionsTests {
                 .bodyJson()
                 .extractingPath("$.paths")
                 .asMap()
-                .containsOnlyKeys("/api/public/probe");
+                .containsKey("/api/public/probe")
+                .allSatisfy((path, operations) -> assertThat(path).startsWith("/api/public/"));
     }
 
     @Test
@@ -56,7 +61,8 @@ class ApiConventionsTests {
                 .bodyJson()
                 .extractingPath("$.paths")
                 .asMap()
-                .containsOnlyKeys("/api/admin/probe");
+                .containsKey("/api/admin/probe")
+                .allSatisfy((path, operations) -> assertThat(path).startsWith("/api/admin/"));
     }
 
     record ProbeRequest(@NotBlank String name) {}

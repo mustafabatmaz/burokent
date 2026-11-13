@@ -2,3 +2,12 @@ databaseChangeLog:
   - include:
       file: shared/001-app-default-privileges.yaml
       relativeToChangelogFile: true
+  - include:
+      file: identity/001-create-users.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: identity/002-create-refresh-tokens.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: identity/003-bootstrap-super-admin.yaml
+      relativeToChangelogFile: true

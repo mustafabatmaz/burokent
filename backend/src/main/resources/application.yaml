@@ -14,6 +14,8 @@ spring:
     parameters:
       owner_user: ${spring.liquibase.user}
       app_user: ${spring.datasource.username}
+      bootstrap_admin_username: ${BOOTSTRAP_ADMIN_USERNAME:}
+      bootstrap_admin_password_hash: ${BOOTSTRAP_ADMIN_PASSWORD_HASH:}
 
 management:
   endpoints:
@@ -40,6 +42,9 @@ spring:
   liquibase:
     user: ${DB_OWNER_USER}
     password: ${DB_OWNER_PASSWORD}
+burokent:
+  auth:
+    jwt-secret: ${JWT_SECRET}
 
 ---
 spring:
