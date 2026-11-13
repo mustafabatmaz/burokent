@@ -1,0 +1,57 @@
+{
+  "site": {
+    "name": "BüroKent",
+    "description": "Classic executive and office furniture made in our own workshop, in series or to your measurements."
+  },
+  "nav": {
+    "home": "Home",
+    "collection": "Collection",
+    "corporate": "Corporate",
+    "workshop": "Our workshop",
+    "projects": "Projects",
+    "contact": "Contact",
+    "quote": "Request a quote",
+    "privacy": "Privacy notice",
+    "cookies": "Cookie policy",
+    "main": "Main menu",
+    "footer": "Footer menu",
+    "legal": "Legal",
+    "menu": "Menu",
+    "closeMenu": "Close menu",
+    "language": "Language",
+    "skipToContent": "Skip to content"
+  },
+  "languages": {
+    "tr": "Türkçe",
+    "en": "English",
+    "ar": "العربية"
+  },
+  "home": {
+    "eyebrow": "Classic office furniture",
+    "title": "Executive furniture made in our own workshop",
+    "text": "We make our sets in series or to your measurements, by the same craftsmen from start to finish.",
+    "primary": "Request a quote",
+    "secondary": "View the collection"
+  },
+  "pages": {
+    "collection": "Collection",
+    "corporate": "Corporate",
+    "workshop": "Our workshop",
+    "projects": "Projects",
+    "contact": "Contact",
+    "quote": "Request a quote",
+    "privacy": "Privacy notice",
+    "cookiePolicy": "Cookie policy"
+  },
+  "placeholder": {
+    "text": "This page is being prepared."
+  },
+  "notFound": {
+    "title": "Page not found",
+    "text": "The page you are looking for may have moved or never existed.",
+    "home": "Back to the home page"
+  },
+  "footer": {
+    "rights": "All rights reserved."
+  }
+}

@@ -17,7 +17,7 @@ parts:
 |---|---|
 | Backend | Java 21, Spring Boot 4, Spring Modulith, Spring Security (JWT in httpOnly cookies), PostgreSQL 18, Liquibase, Maven |
 | Admin panel | React 19, Vite, React Router, TanStack Query, Tailwind CSS 4, Base UI, shadcn-style components |
-| Public site | Next.js (App Router), next-intl (TR / EN / AR with RTL) *(planned)* |
+| Public site | Next.js 16 (App Router), next-intl (TR / EN / AR with right-to-left Arabic), Tailwind CSS 4 |
 | Shared | pnpm workspace, TypeScript (strict), design tokens, API client generated from OpenAPI |
 | Tests | JUnit 5, Testcontainers, MockMvc, ArchUnit, Vitest, Testing Library, MSW |
 | Infrastructure | Docker Compose |
@@ -45,6 +45,7 @@ admin-web (Vite + React)  ──┘
 backend/     Spring Boot application (modules: shared, identity, audit, ...)
 frontend/    pnpm workspace
   apps/admin-web/          admin panel (Vite + React)
+  apps/public-web/         public website (Next.js, three languages)
   packages/api-client/     OpenAPI specs, generated types, public and admin clients
   packages/tokens/         design tokens for Tailwind (public site and admin panel)
 infra/       Docker Compose for development, PostgreSQL init script
@@ -60,7 +61,7 @@ infra/       Docker Compose for development, PostgreSQL init script
 - [x] Frontend workspace (design tokens, generated API client, RTL lint rule)
 - [x] Admin panel shell (login, layout for desktop, tablet and phone, light and dark theme)
 - [x] Admin panel: users, roles and activity log screens
-- [ ] Public website skeleton (three languages, RTL)
+- [x] Public website skeleton (three languages, RTL)
 - [ ] CI and production setup
 - [ ] Catalogue, quote requests and the public website's content
 - [ ] Stock, production and suppliers
@@ -135,6 +136,17 @@ pnpm --filter @burokent/admin-web dev
 Open http://localhost:5180 and sign in as the super admin. The Vite dev server passes `/api` to the backend, so the
 panel and the API share one origin and the session cookies work as they will in production.
 
+### 6. Public website
+
+```bash
+cd frontend
+pnpm --filter @burokent/public-web dev
+```
+
+Open http://localhost:3100; it redirects to `/tr`, `/en` or `/ar` by the browser's language. Addresses are translated
+(`/tr/koleksiyon`, `/en/collection`) and Arabic pages are right-to-left. The fonts are downloaded from Google Fonts
+when the site is built and then served by the site itself.
+
 ## Checks
 
 Backend (Testcontainers needs Docker running):
@@ -170,7 +182,7 @@ pnpm generate:api
 - **The backend stops with "bootstrap super admin parameters are missing or invalid":** `BOOTSTRAP_ADMIN_USERNAME`
   or `BOOTSTRAP_ADMIN_PASSWORD_HASH` is missing from `infra/.env`, or the hash lacks the `{bcrypt}` prefix or the
   single quotes.
-- **Port 8090, 5180 or 5433 is already in use:** another project is running on it; stop it or change the port in
+- **Port 8090, 5180, 3100 or 5433 is already in use:** another project is running on it; stop it or change the port in
   `infra/compose.dev.yaml`, `backend/src/main/resources/application.yaml` (`dev` profile) or
   `frontend/apps/admin-web/vite.config.ts`.
 - **Login answers "too many attempts":** after 5 failed logins for a user name (20 per address) in 15 minutes, logins

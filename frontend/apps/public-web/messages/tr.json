@@ -1,0 +1,57 @@
+{
+  "site": {
+    "name": "BüroKent",
+    "description": "Kendi atölyemizde ürettiğimiz klasik makam ve ofis mobilyaları. Seri ya da özel ölçü üretim, kendi ustalarımızla teslimat ve montaj."
+  },
+  "nav": {
+    "home": "Ana sayfa",
+    "collection": "Koleksiyon",
+    "corporate": "Kurumsal",
+    "workshop": "Atölyemiz",
+    "projects": "Projeler",
+    "contact": "İletişim",
+    "quote": "Teklif İste",
+    "privacy": "KVKK Aydınlatma Metni",
+    "cookies": "Çerez Politikası",
+    "main": "Ana menü",
+    "footer": "Alt bilgi menüsü",
+    "legal": "Yasal bilgiler",
+    "menu": "Menü",
+    "closeMenu": "Menüyü kapat",
+    "language": "Dil",
+    "skipToContent": "İçeriğe geç"
+  },
+  "languages": {
+    "tr": "Türkçe",
+    "en": "English",
+    "ar": "العربية"
+  },
+  "home": {
+    "eyebrow": "Klasik ofis mobilyası",
+    "title": "Kendi atölyemizde üretilen makam mobilyaları",
+    "text": "Takımları seri ya da özel ölçüde üretiyor, teslimat ve montajı kendi ustalarımızla yapıyoruz.",
+    "primary": "Teklif İste",
+    "secondary": "Koleksiyonu gör"
+  },
+  "pages": {
+    "collection": "Koleksiyon",
+    "corporate": "Kurumsal",
+    "workshop": "Atölyemiz",
+    "projects": "Projeler",
+    "contact": "İletişim",
+    "quote": "Teklif İste",
+    "privacy": "KVKK Aydınlatma Metni",
+    "cookiePolicy": "Çerez Politikası"
+  },
+  "placeholder": {
+    "text": "Bu sayfa hazırlanıyor."
+  },
+  "notFound": {
+    "title": "Sayfa bulunamadı",
+    "text": "Aradığınız sayfa taşınmış ya da hiç olmamış olabilir.",
+    "home": "Ana sayfaya dön"
+  },
+  "footer": {
+    "rights": "Tüm hakları saklıdır."
+  }
+}

@@ -1,3 +1,8 @@
 packages:
   - apps/*
   - packages/*
+# Install scripts stay off. next-intl lists these for its message extraction tooling, which we don't use;
+# their scripts only build from source when no prebuilt binary fits.
+allowBuilds:
+  "@parcel/watcher": false
+  "@swc/core": false
