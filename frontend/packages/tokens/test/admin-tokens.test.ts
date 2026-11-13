@@ -12,7 +12,7 @@ describe("admin tokens", () => {
     expect(light.get("--card")).toBe("#ffffff");
     expect(light.get("--border")).toBe("#e2e8f0");
     expect(light.get("--foreground")).toBe("#0f172a");
-    expect(light.get("--muted-foreground")).toBe("#64748b");
+    expect(light.get("--muted-foreground")).toBe("#5b6b80");
     expect(light.get("--primary")).toBe("#2563eb");
     expect(light.get("--primary-foreground")).toBe("#ffffff");
     expect(light.get("--secondary")).toBe("#eff6ff");

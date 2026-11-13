@@ -21,11 +21,11 @@ export function LanguageSwitcher() {
           locale={locale}
           lang={locale}
           hrefLang={locale}
-          aria-label={t(locale)}
           aria-current={locale === current ? "true" : undefined}
           className="flex min-h-11 min-w-11 items-center justify-center text-sand hover:text-gold aria-[current]:text-gold"
         >
-          {SHORT[locale]}
+          {/* Named by its content: the visible code first, then the language for screen readers (WCAG 2.5.3) */}
+          {SHORT[locale]} <span className="sr-only">{t(locale)}</span>
         </Link>
       ))}
     </nav>

@@ -1,6 +1,7 @@
 packages:
   - apps/*
   - packages/*
+  - e2e
 # Install scripts stay off. next-intl lists these for its message extraction tooling, which we don't use;
 # their scripts only build from source when no prebuilt binary fits.
 allowBuilds:

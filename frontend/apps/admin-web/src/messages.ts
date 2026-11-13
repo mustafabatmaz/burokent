@@ -29,6 +29,7 @@ export const messages = {
     collapse: "Menüyü daralt",
     expand: "Menüyü genişlet",
     userMenu: (name: string) => `Kullanıcı menüsü: ${name}`,
+    notifications: "Bildirimler",
     logout: "Çıkış yap",
     theme: "Tema",
     themes: { light: "Açık", dark: "Koyu", system: "Cihaza göre" },

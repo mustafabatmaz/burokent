@@ -22,6 +22,8 @@ export default defineConfig(
       "**/coverage/**",
       "**/generated/**",
       "**/next-env.d.ts",
+      "**/playwright-report/**",
+      "**/test-results/**",
     ],
   },
   js.configs.recommended,
