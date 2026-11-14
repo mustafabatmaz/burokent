@@ -53,5 +53,282 @@
   },
   "footer": {
     "rights": "All rights reserved."
+  },
+  "corporate": {
+    "eyebrow": "Corporate",
+    "title": "Executive and office furniture for institutions",
+    "lead": "We build furniture sets in our own workshop for public institutions, companies and project-based work, and our own team handles every step from the site survey to installation.",
+    "audience": {
+      "title": "Who we work for",
+      "items": [
+        {
+          "title": "Public institutions",
+          "text": "Classic sets for the executive offices and meeting rooms of institutions such as governorships and university rectorates."
+        },
+        {
+          "title": "Companies",
+          "text": "Executive desks, bookcases, seating groups and meeting tables for head offices and management floors."
+        },
+        {
+          "title": "Project-based work",
+          "text": "The same series for several rooms or floors, made to measure where needed."
+        }
+      ]
+    },
+    "process": {
+      "title": "How we work",
+      "steps": [
+        {
+          "title": "Request",
+          "text": "Fill in the form or write to us, and we talk through your needs and approximate quantities."
+        },
+        {
+          "title": "Survey and measuring",
+          "text": "We visit your premises and take the measurements on site."
+        },
+        {
+          "title": "Quotation",
+          "text": "You receive a written quotation, itemised piece by piece with VAT shown separately."
+        },
+        {
+          "title": "Production",
+          "text": "We build your sets in our own workshop, in standard or custom sizes."
+        },
+        {
+          "title": "Delivery and installation",
+          "text": "Our own craftsmen deliver and install anywhere in Turkey; delivery and installation are included in the price."
+        }
+      ]
+    },
+    "flexible": {
+      "title": "A set that fits your needs",
+      "text": "You don't have to take every piece of a set. We leave out what you don't need and combine pieces from different series; the quotation is calculated piece by piece accordingly."
+    },
+    "cta": {
+      "title": "Get a quotation for your institution",
+      "text": "Tell us what you need, and we will call you to go through the details.",
+      "primary": "Request a quote",
+      "secondary": "Visit our workshop"
+    }
+  },
+  "workshop": {
+    "eyebrow": "Our workshop",
+    "title": "We make our furniture in our own workshop",
+    "lead": "Our showroom, workshop and warehouse stand side by side on the same site. Come and see where, and by whom, the set you like is made.",
+    "place": {
+      "title": "All at one address",
+      "text": "Three parts of the business work together on our site of about two thousand square metres.",
+      "items": [
+        {
+          "title": "Showroom",
+          "text": "See the sets in person and take a close look at the materials and craftsmanship."
+        },
+        {
+          "title": "Workshop",
+          "text": "This is where our own craftsmen make the sets."
+        },
+        {
+          "title": "Warehouse",
+          "text": "Finished pieces wait here and leave from here for delivery."
+        }
+      ]
+    },
+    "craft": {
+      "title": "Our own craftsmen",
+      "text": "From production to delivery and installation, we don't hand the work over to anyone else. The people who make your sets are the same team that brings them to your door and installs them."
+    },
+    "custom": {
+      "title": "Made to measure",
+      "text": "If a standard size doesn't fit your room, we make the set to your measurements.",
+      "steps": [
+        {
+          "title": "Survey and measuring",
+          "text": "We measure your premises on site, or take the measurements from you."
+        },
+        {
+          "title": "Quotation",
+          "text": "We prepare an itemised quotation based on the measurements."
+        },
+        {
+          "title": "Production",
+          "text": "Once you approve, production starts in our workshop."
+        },
+        {
+          "title": "Delivery and installation",
+          "text": "Our own craftsmen deliver and install it."
+        }
+      ]
+    },
+    "visit": {
+      "title": "Come and see for yourself",
+      "text": "We would rather you saw the sets in person than in photos. Our showroom and workshop are open from {opens} to {closes}.",
+      "primary": "Contact details",
+      "secondary": "Request a quote"
+    }
+  },
+  "contact": {
+    "eyebrow": "Contact",
+    "title": "Get in touch",
+    "lead": "Our showroom, workshop and warehouse are at the same address. Drop by to see the sets, or write to us.",
+    "details": {
+      "title": "Contact details",
+      "phone": "Phone",
+      "email": "E-mail",
+      "address": "Address",
+      "hours": "Opening hours"
+    },
+    "abroad": {
+      "title": "Customers from abroad",
+      "text": "We don't install outside Turkey. Instead, we teach you the installation and support you remotely.",
+      "items": [
+        {
+          "title": "Come and see",
+          "text": "Examine the sets in person in our showroom."
+        },
+        {
+          "title": "Learn the installation",
+          "text": "We show your team the installation step by step in our workshop."
+        },
+        {
+          "title": "Video call support",
+          "text": "Wherever you get stuck during installation, we are with you on a video call."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Would you like a quotation?",
+      "text": "Tell us the products and quantities you are interested in, and we will call you.",
+      "primary": "Request a quote"
+    }
+  },
+  "privacy": {
+    "title": "Privacy notice",
+    "lead": "Under the Turkish Personal Data Protection Law No. 6698 (KVKK), we inform you about the personal data we process through our website and our quotation form.",
+    "updated": "Last updated: {date}",
+    "controller": {
+      "title": "Data controller",
+      "text": "Your personal data is processed by {controller} as the data controller. You can reach us at <email>{address}</email>."
+    },
+    "data": {
+      "title": "What personal data we process",
+      "text": "When you fill in the quotation form or write to us:",
+      "items": [
+        "Identity and contact details: name and surname, phone number, e-mail address (optional), city",
+        "Request details: whether you are an individual or a corporate customer, company name, the products you are interested in, approximate quantity, your note and the language you used",
+        "Security details: the IP address, browser information and time of your submission",
+        "The content of the e-mails you send us"
+      ]
+    },
+    "purposes": {
+      "title": "Why we process it",
+      "items": [
+        "To get back to you, discuss your needs and prepare a quotation",
+        "To carry out pre-sale discussions and any contract with you",
+        "To prevent misuse of the form and the website (automated submissions, attacks)",
+        "To fulfil our legal obligations"
+      ]
+    },
+    "legalBasis": {
+      "title": "Legal grounds",
+      "text": "We process your personal data on the following grounds of Article 5(2) of the KVKK:",
+      "items": [
+        "It is directly related to the conclusion or performance of a contract (point c): getting back to you and preparing a quotation",
+        "It is necessary for compliance with a legal obligation of the data controller (point ç)",
+        "Our legitimate interest, provided it does not harm your fundamental rights and freedoms (point f): the security of the form and the website"
+      ],
+      "note": "We do not send you marketing messages, so we do not ask for your explicit consent."
+    },
+    "collection": {
+      "title": "How we collect it",
+      "text": "We collect your data electronically, through the quotation form on our website and by e-mail."
+    },
+    "transfer": {
+      "title": "Who we share it with",
+      "text": "We do not sell your data or share it with anyone for marketing. It is only transferred:",
+      "items": [
+        "To public authorities legally entitled to it, when there is a legal obligation",
+        "To service providers whose servers are located abroad and whom we use to run our website and e-mail: hosting (Hostinger; our server is in France), network and security services (Cloudflare), e-mail (Zoho) and encrypted backups (Backblaze; European Union)"
+      ],
+      "note": "Transfers abroad are made in line with the safeguards set out in Article 9 of the KVKK."
+    },
+    "retention": {
+      "title": "How long we keep it",
+      "items": [
+        "Requests that do not lead to a sale: 2 years from the request; after that, the personal data is deleted or anonymised",
+        "Requests that lead to a sale: 10 years as commercial records (Turkish Commercial Code No. 6102, Article 82)",
+        "Server logs kept for security: for a short time, on a rotating basis, and deleted automatically"
+      ]
+    },
+    "rights": {
+      "title": "Your rights",
+      "text": "Under Article 11 of the KVKK, you have the right to:",
+      "items": [
+        "Learn whether your personal data is processed",
+        "Request information about it if it has been processed",
+        "Learn the purpose of the processing and whether the data is used accordingly",
+        "Know the third parties in Turkey or abroad to whom it has been transferred",
+        "Ask for it to be corrected if it is incomplete or inaccurate",
+        "Ask for it to be deleted or destroyed under the conditions of Article 7 of the KVKK",
+        "Ask for any correction, deletion or destruction to be notified to the third parties it was transferred to",
+        "Object to a result against you arising solely from automated analysis",
+        "Claim compensation for damage caused by unlawful processing"
+      ]
+    },
+    "application": {
+      "title": "How to apply",
+      "text": "You can send requests about your rights to <email>{address}</email>. We will respond within 30 days at the latest; applications are free of charge as a rule."
+    }
+  },
+  "cookies": {
+    "title": "Cookie policy",
+    "lead": "This page explains which cookies our website uses and why.",
+    "updated": "Last updated: {date}",
+    "what": {
+      "title": "What cookies are",
+      "text": "Cookies are small text files saved in your browser when you visit a website."
+    },
+    "used": {
+      "title": "The cookies we use",
+      "text": "Our website only uses cookies that are strictly necessary for it to work and stay secure. These cookies do not need your consent.",
+      "columns": {
+        "name": "Cookie",
+        "purpose": "Purpose",
+        "duration": "Duration",
+        "provider": "Set by"
+      },
+      "rows": [
+        {
+          "name": "NEXT_LOCALE",
+          "purpose": "Remembers the language you chose",
+          "duration": "Until you close the browser",
+          "provider": "BüroKent"
+        },
+        {
+          "name": "__cf_bm",
+          "purpose": "Protects the website against automated attacks",
+          "duration": "30 minutes",
+          "provider": "Cloudflare"
+        },
+        {
+          "name": "cf_clearance",
+          "purpose": "Remembers that you passed a security check; only saved if a check is shown",
+          "duration": "Short, depending on the security setting",
+          "provider": "Cloudflare"
+        }
+      ]
+    },
+    "none": {
+      "title": "Cookies we do not use",
+      "text": "We do not use analytics or advertising cookies, or cookies that track you across other websites. If we ever add one, we will ask for your consent first."
+    },
+    "manage": {
+      "title": "Managing cookies",
+      "text": "You can view and delete cookies in your browser settings. If you block strictly necessary cookies, your language choice may not be remembered."
+    },
+    "more": {
+      "title": "More information",
+      "text": "Our Privacy Notice explains how your personal data is processed. For questions: <email>{address}</email>",
+      "link": "Privacy notice"
+    }
   }
 }

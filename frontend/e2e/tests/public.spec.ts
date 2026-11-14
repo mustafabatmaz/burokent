@@ -41,6 +41,41 @@ test.describe("public site", () => {
     await expect(page.getByRole("heading", { name: "Sayfa bulunamadı" })).toBeVisible();
   });
 
+  test("the corporate page walks through the process, on-site survey included", async ({ page }) => {
+    await page.goto(SITE + "/tr/kurumsal");
+
+    const steps = page.getByRole("list", { name: "Nasıl çalışıyoruz" }).getByRole("listitem");
+    await expect(steps).toHaveCount(5);
+    await expect(steps.nth(1)).toContainText("Keşif ve ölçü");
+    await expect(page.getByRole("link", { name: "Teklif İste" }).last()).toHaveAttribute("href", "/tr/teklif");
+  });
+
+  for (const locale of LOCALES) {
+    test(`contact details in ${locale}, and the section for customers abroad only in English and Arabic`, async ({
+      page,
+    }) => {
+      await page.goto(`${SITE}/${locale}/${locale === "tr" ? "iletisim" : "contact"}`);
+
+      await expect(page.locator('main a[href="mailto:info@burokent.com"]')).toBeVisible();
+      await expect(page.locator("main")).toContainText("08:00–18:00");
+      await expect(page.locator("#abroad")).toHaveCount(locale === "tr" ? 0 : 1);
+    });
+
+    test(`the privacy notice lists all nine rights in ${locale}`, async ({ page }) => {
+      await page.goto(`${SITE}/${locale}/${locale === "tr" ? "kvkk" : "privacy"}`);
+
+      await expect(page.locator("#rights li")).toHaveCount(9);
+      await expect(page.locator("#controller")).toContainText("info@burokent.com");
+    });
+  }
+
+  test("the Arabic corporate page looks as approved", async ({ page }) => {
+    await page.goto(SITE + "/ar/corporate");
+    await page.evaluate(() => document.fonts.ready);
+
+    await expect(page).toHaveScreenshot("ar-corporate.png", { fullPage: true });
+  });
+
   test("the Arabic home page looks as approved", async ({ page }) => {
     await page.goto(SITE + "/ar");
     await page.evaluate(() => document.fonts.ready);
