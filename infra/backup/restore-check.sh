@@ -39,5 +39,7 @@ docker exec "$DB_CONTAINER" psql -U postgres -d burokent -At -c "
     union all select 'users', count(*) from users
     union all select 'roles', count(*) from roles
     union all select 'permissions', count(*) from permissions
-    union all select 'audit events', count(*) from audit_events"
+    union all select 'audit events', count(*) from audit_events
+    union all select 'images', count(*) from media_assets"
+echo "== Images: $(find "$SCRATCH/backup/media" -type f 2> /dev/null | wc -l | tr -d ' ') files"
 echo "== Restore check passed"

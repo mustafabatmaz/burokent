@@ -5,7 +5,35 @@
     "version" : "1"
   },
   "openapi" : "3.1.0",
-  "paths" : { },
+  "paths" : {
+    "/api/public/media/{fileName}" : {
+      "get" : {
+        "operationId" : "file",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "fileName",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "public-media-controller" ]
+      }
+    }
+  },
   "servers" : [ {
     "url" : "/"
   } ]

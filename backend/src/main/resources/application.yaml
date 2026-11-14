@@ -1,6 +1,11 @@
 spring:
   application:
     name: burokent
+  servlet:
+    multipart:
+      # One image per request; the media module checks the size again with its own error code
+      max-file-size: 20MB
+      max-request-size: 21MB
   jpa:
     open-in-view: false
     hibernate:
@@ -50,6 +55,8 @@ spring:
 burokent:
   auth:
     jwt-secret: ${JWT_SECRET}
+  media:
+    root: ${MEDIA_ROOT}
 
 ---
 spring:

@@ -1,0 +1,34 @@
+databaseChangeLog:
+  - changeSet:
+      id: media-002
+      author: burokent
+      changes:
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: code
+                  value: media.read
+              - column:
+                  name: delegable
+                  valueBoolean: true
+        - insert:
+            tableName: permissions
+            columns:
+              - column:
+                  name: code
+                  value: media.manage
+              - column:
+                  name: delegable
+                  valueBoolean: true
+        # Day-to-day work: the starting role gets both
+        - sql:
+            sql: >-
+              INSERT INTO role_permissions (role_id, permission_code)
+              SELECT r.id, p.code FROM roles r CROSS JOIN permissions p
+              WHERE r.name = 'Yönetici' AND p.code IN ('media.read', 'media.manage')
+      rollback:
+        - sql:
+            sql: >-
+              DELETE FROM role_permissions WHERE permission_code IN ('media.read', 'media.manage');
+              DELETE FROM permissions WHERE code IN ('media.read', 'media.manage')

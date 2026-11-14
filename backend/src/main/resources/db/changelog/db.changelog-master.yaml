@@ -26,3 +26,9 @@ databaseChangeLog:
   - include:
       file: audit/002-insert-audit-permission.yaml
       relativeToChangelogFile: true
+  - include:
+      file: media/001-create-media.yaml
+      relativeToChangelogFile: true
+  - include:
+      file: media/002-insert-media-permissions.yaml
+      relativeToChangelogFile: true

@@ -8,7 +8,7 @@ export interface paths {
             path?: never;
             cookie?: never;
         };
-        get: operations["list_2"];
+        get: operations["list_3"];
         put?: never;
         post?: never;
         delete?: never;
@@ -107,6 +107,70 @@ export interface paths {
         get?: never;
         put?: never;
         post: operations["change"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/media": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["list_2"];
+        put?: never;
+        post: operations["upload"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/media/{id}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["get_2"];
+        put: operations["update_2"];
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/media/{id}/archive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["archive_1"];
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
+    "/api/admin/media/{id}/unarchive": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get?: never;
+        put?: never;
+        post: operations["unarchive_1"];
         delete?: never;
         options?: never;
         head?: never;
@@ -261,6 +325,11 @@ export interface paths {
 export type webhooks = Record<string, never>;
 export interface components {
     schemas: {
+        AltTexts: {
+            ar?: string;
+            en?: string;
+            tr?: string;
+        };
         AuditEventView: {
             action: string;
             actorName?: string;
@@ -312,6 +381,26 @@ export interface components {
             superAdmin: boolean;
             username: string;
         };
+        MediaView: {
+            altText: components["schemas"]["AltTexts"];
+            archived: boolean;
+            /** Format: int64 */
+            byteSize: number;
+            contentType: string;
+            /** Format: date-time */
+            createdAt: string;
+            /** Format: int32 */
+            height: number;
+            /** Format: int64 */
+            id: number;
+            originalFileName: string;
+            thumbnailUrl: string;
+            url: string;
+            /** Format: int64 */
+            version: number;
+            /** Format: int32 */
+            width: number;
+        };
         PageMetadata: {
             /** Format: int64 */
             number: number;
@@ -324,6 +413,10 @@ export interface components {
         };
         PagedModelAuditEventView: {
             content: components["schemas"]["AuditEventView"][];
+            page: components["schemas"]["PageMetadata"];
+        };
+        PagedModelMediaView: {
+            content: components["schemas"]["MediaView"][];
             page: components["schemas"]["PageMetadata"];
         };
         PermissionDefinition: {
@@ -339,6 +432,11 @@ export interface components {
             id: number;
             name: string;
             permissions: string[];
+            /** Format: int64 */
+            version: number;
+        };
+        UpdateMediaRequest: {
+            altText: components["schemas"]["AltTexts"];
             /** Format: int64 */
             version: number;
         };
@@ -377,7 +475,7 @@ export interface components {
 }
 export type $defs = Record<string, never>;
 export interface operations {
-    list_2: {
+    list_3: {
         parameters: {
             query?: {
                 actorUserId?: number | null;
@@ -514,6 +612,145 @@ export interface operations {
                 "application/json": components["schemas"]["ChangePasswordRequest"];
             };
         };
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    list_2: {
+        parameters: {
+            query?: {
+                archived?: boolean;
+                page?: number;
+                size?: number;
+            };
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["PagedModelMediaView"];
+                };
+            };
+        };
+    };
+    upload: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: {
+            content: {
+                "multipart/form-data": {
+                    /** Format: binary */
+                    file: string;
+                };
+            };
+        };
+        responses: {
+            /** @description Created */
+            201: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MediaView"];
+                };
+            };
+        };
+    };
+    get_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MediaView"];
+                };
+            };
+        };
+    };
+    update_2: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody: {
+            content: {
+                "application/json": components["schemas"]["UpdateMediaRequest"];
+            };
+        };
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["MediaView"];
+                };
+            };
+        };
+    };
+    archive_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description No Content */
+            204: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content?: never;
+            };
+        };
+    };
+    unarchive_1: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                id: number;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
         responses: {
             /** @description No Content */
             204: {

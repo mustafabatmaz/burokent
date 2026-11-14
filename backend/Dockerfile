@@ -15,11 +15,14 @@ RUN ./mvnw -B -q package -DskipTests -Dspotless.check.skip=true \
 
 # ---- Stage 2: run with only the JRE, as a non-root user ----
 FROM eclipse-temurin:21-jre
+# The image directory belongs to the app user: a new volume takes over its owner, so the app can write there
 RUN apt-get update \
     && apt-get install -y --no-install-recommends curl \
     && rm -rf /var/lib/apt/lists/* \
     && groupadd --system app \
-    && useradd --system --gid app --no-create-home app
+    && useradd --system --gid app --no-create-home app \
+    && mkdir -p /var/lib/burokent/media \
+    && chown app:app /var/lib/burokent/media
 WORKDIR /app
 
 # Spring Boot layers, least to most frequently changing

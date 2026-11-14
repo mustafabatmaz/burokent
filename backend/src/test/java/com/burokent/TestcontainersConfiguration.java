@@ -1,5 +1,8 @@
 package com.burokent;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
 import org.springframework.boot.test.context.TestConfiguration;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.factory.PasswordEncoderFactories;
@@ -46,7 +49,8 @@ public class TestcontainersConfiguration {
     }
 
     @Bean
-    DynamicPropertyRegistrar databaseProperties(PostgreSQLContainer postgres) {
+    DynamicPropertyRegistrar databaseProperties(PostgreSQLContainer postgres) throws IOException {
+        Path mediaRoot = Files.createTempDirectory("burokent-media-test");
         return registry -> {
             registry.add("spring.datasource.url", postgres::getJdbcUrl);
             registry.add("spring.datasource.username", () -> APP_USER);
@@ -57,6 +61,7 @@ public class TestcontainersConfiguration {
             registry.add(
                     "spring.liquibase.parameters.bootstrap_admin_password_hash", () -> BOOTSTRAP_ADMIN_PASSWORD_HASH);
             registry.add("burokent.auth.jwt-secret", () -> JWT_SECRET);
+            registry.add("burokent.media.root", () -> mediaRoot.toString());
         };
     }
 }

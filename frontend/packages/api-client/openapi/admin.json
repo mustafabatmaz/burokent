@@ -1,6 +1,26 @@
 {
   "components" : {
     "schemas" : {
+      "AltTexts" : {
+        "properties" : {
+          "ar" : {
+            "maxLength" : 250,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "en" : {
+            "maxLength" : 250,
+            "minLength" : 0,
+            "type" : "string"
+          },
+          "tr" : {
+            "maxLength" : 250,
+            "minLength" : 0,
+            "type" : "string"
+          }
+        },
+        "type" : "object"
+      },
       "AuditEventView" : {
         "properties" : {
           "action" : {
@@ -166,6 +186,54 @@
         "required" : [ "displayName", "id", "permissions", "superAdmin", "username" ],
         "type" : "object"
       },
+      "MediaView" : {
+        "properties" : {
+          "altText" : {
+            "$ref" : "#/components/schemas/AltTexts"
+          },
+          "archived" : {
+            "type" : "boolean"
+          },
+          "byteSize" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "contentType" : {
+            "type" : "string"
+          },
+          "createdAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "height" : {
+            "format" : "int32",
+            "type" : "integer"
+          },
+          "id" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "originalFileName" : {
+            "type" : "string"
+          },
+          "thumbnailUrl" : {
+            "type" : "string"
+          },
+          "url" : {
+            "type" : "string"
+          },
+          "version" : {
+            "format" : "int64",
+            "type" : "integer"
+          },
+          "width" : {
+            "format" : "int32",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "altText", "archived", "byteSize", "contentType", "createdAt", "height", "id", "originalFileName", "thumbnailUrl", "url", "version", "width" ],
+        "type" : "object"
+      },
       "PageMetadata" : {
         "properties" : {
           "number" : {
@@ -193,6 +261,21 @@
           "content" : {
             "items" : {
               "$ref" : "#/components/schemas/AuditEventView"
+            },
+            "type" : "array"
+          },
+          "page" : {
+            "$ref" : "#/components/schemas/PageMetadata"
+          }
+        },
+        "required" : [ "content", "page" ],
+        "type" : "object"
+      },
+      "PagedModelMediaView" : {
+        "properties" : {
+          "content" : {
+            "items" : {
+              "$ref" : "#/components/schemas/MediaView"
             },
             "type" : "array"
           },
@@ -249,6 +332,19 @@
           }
         },
         "required" : [ "id", "name", "permissions", "version" ],
+        "type" : "object"
+      },
+      "UpdateMediaRequest" : {
+        "properties" : {
+          "altText" : {
+            "$ref" : "#/components/schemas/AltTexts"
+          },
+          "version" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        },
+        "required" : [ "altText", "version" ],
         "type" : "object"
       },
       "UpdateRoleRequest" : {
@@ -337,7 +433,7 @@
   "paths" : {
     "/api/admin/audit-events" : {
       "get" : {
-        "operationId" : "list_2",
+        "operationId" : "list_3",
         "parameters" : [ {
           "in" : "query",
           "name" : "actorUserId",
@@ -508,6 +604,185 @@
           }
         },
         "tags" : [ "own-password-controller" ]
+      }
+    },
+    "/api/admin/media" : {
+      "get" : {
+        "operationId" : "list_2",
+        "parameters" : [ {
+          "in" : "query",
+          "name" : "archived",
+          "required" : false,
+          "schema" : {
+            "default" : false,
+            "type" : "boolean"
+          }
+        }, {
+          "in" : "query",
+          "name" : "page",
+          "required" : false,
+          "schema" : {
+            "default" : 0,
+            "format" : "int32",
+            "type" : "integer"
+          }
+        }, {
+          "in" : "query",
+          "name" : "size",
+          "required" : false,
+          "schema" : {
+            "default" : 48,
+            "format" : "int32",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/PagedModelMediaView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "media-controller" ]
+      },
+      "post" : {
+        "operationId" : "upload",
+        "requestBody" : {
+          "content" : {
+            "multipart/form-data" : {
+              "schema" : {
+                "properties" : {
+                  "file" : {
+                    "format" : "binary",
+                    "type" : "string"
+                  }
+                },
+                "required" : [ "file" ],
+                "type" : "object"
+              }
+            }
+          }
+        },
+        "responses" : {
+          "201" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MediaView"
+                }
+              }
+            },
+            "description" : "Created"
+          }
+        },
+        "tags" : [ "media-controller" ]
+      }
+    },
+    "/api/admin/media/{id}" : {
+      "get" : {
+        "operationId" : "get_2",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MediaView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "media-controller" ]
+      },
+      "put" : {
+        "operationId" : "update_2",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "requestBody" : {
+          "content" : {
+            "application/json" : {
+              "schema" : {
+                "$ref" : "#/components/schemas/UpdateMediaRequest"
+              }
+            }
+          },
+          "required" : true
+        },
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/MediaView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "media-controller" ]
+      }
+    },
+    "/api/admin/media/{id}/archive" : {
+      "post" : {
+        "operationId" : "archive_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "tags" : [ "media-controller" ]
+      }
+    },
+    "/api/admin/media/{id}/unarchive" : {
+      "post" : {
+        "operationId" : "unarchive_1",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "tags" : [ "media-controller" ]
       }
     },
     "/api/admin/permissions" : {
