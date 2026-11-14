@@ -1,0 +1,13 @@
+# Every night at 03:30 Turkish time, half an hour after the other site's backup on the same server. Persistent: a
+# run missed while the server was down happens as soon as it is back.
+# Enable with: sudo systemctl enable --now burokent-backup.timer
+[Unit]
+Description=Nightly backup of the BüroKent database
+
+[Timer]
+OnCalendar=*-*-* 03:30:00 Europe/Istanbul
+Persistent=true
+RandomizedDelaySec=10min
+
+[Install]
+WantedBy=timers.target
