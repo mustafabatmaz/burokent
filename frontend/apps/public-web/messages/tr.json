@@ -53,5 +53,282 @@
   },
   "footer": {
     "rights": "Tüm hakları saklıdır."
+  },
+  "corporate": {
+    "eyebrow": "Kurumsal",
+    "title": "Kurumlar için makam ve ofis mobilyası",
+    "lead": "Kamu kurumları, şirketler ve proje bazlı işler için takımları kendi atölyemizde üretiyor; keşiften montaja kadar her adımı kendi ekibimizle yürütüyoruz.",
+    "audience": {
+      "title": "Kimler için çalışıyoruz",
+      "items": [
+        {
+          "title": "Kamu kurumları",
+          "text": "Valilik ve rektörlük gibi kurumların makam odaları ve toplantı salonları için klasik takımlar."
+        },
+        {
+          "title": "Şirketler",
+          "text": "Genel müdürlük ve yönetim katları için makam masası, kütüphane, oturma grubu ve toplantı masası."
+        },
+        {
+          "title": "Proje bazlı işler",
+          "text": "Birden çok oda ya da kat için aynı seriden, gerektiğinde özel ölçüde üretim."
+        }
+      ]
+    },
+    "process": {
+      "title": "Nasıl çalışıyoruz",
+      "steps": [
+        {
+          "title": "Talep",
+          "text": "Formu doldurun ya da bize yazın; ihtiyacınızı ve yaklaşık adetleri konuşalım."
+        },
+        {
+          "title": "Keşif ve ölçü",
+          "text": "Mekânınızı yerinde görüp ölçüyoruz."
+        },
+        {
+          "title": "Teklif",
+          "text": "Parça parça hazırlanan, KDV'si ayrı gösterilen yazılı bir teklif sunuyoruz."
+        },
+        {
+          "title": "Üretim",
+          "text": "Takımlarınızı kendi atölyemizde, seri ya da özel ölçüde üretiyoruz."
+        },
+        {
+          "title": "Teslimat ve montaj",
+          "text": "Türkiye'nin her yerinde kendi ustalarımızla teslim edip kuruyoruz; teslimat ve montaj fiyata dahildir."
+        }
+      ]
+    },
+    "flexible": {
+      "title": "Takım, ihtiyacınıza göre",
+      "text": "Bir takımın bütün parçalarını almak zorunda değilsiniz. İstemediğiniz parçayı çıkarır, farklı serilerden parçaları bir araya getiririz; teklif de buna göre parça parça hesaplanır."
+    },
+    "cta": {
+      "title": "Kurumunuz için teklif alın",
+      "text": "İhtiyacınızı yazın; sizi arayıp ayrıntıları konuşalım.",
+      "primary": "Teklif İste",
+      "secondary": "Atölyemizi tanıyın"
+    }
+  },
+  "workshop": {
+    "eyebrow": "Atölyemiz",
+    "title": "Mobilyalarımızı kendi atölyemizde üretiyoruz",
+    "lead": "Mağazamız, atölyemiz ve depomuz aynı arazide, yan yana. Beğendiğiniz takımın nerede ve kimlerin elinde üretildiğini gelip görebilirsiniz.",
+    "place": {
+      "title": "Hepsi tek adreste",
+      "text": "Yaklaşık iki dönümlük arazimizde üç bölüm bir arada çalışıyor.",
+      "items": [
+        {
+          "title": "Mağaza",
+          "text": "Takımları yerinde görün; malzemeye ve işçiliğe yakından bakın."
+        },
+        {
+          "title": "Atölye",
+          "text": "Takımlar burada, kendi ustalarımızın elinde üretiliyor."
+        },
+        {
+          "title": "Depo",
+          "text": "Hazır ürünler burada bekliyor, teslimata buradan çıkıyor."
+        }
+      ]
+    },
+    "craft": {
+      "title": "Kendi ustalarımız",
+      "text": "Üretimden teslimata ve montaja kadar işi başkasına bırakmıyoruz. Takımlarınızı üreten de kapınıza getirip kuran da kendi ekibimiz."
+    },
+    "custom": {
+      "title": "Özel ölçü üretim",
+      "text": "Odanıza tam oturmayan bir ölçü varsa takımı o ölçüde üretiyoruz.",
+      "steps": [
+        {
+          "title": "Keşif ve ölçü",
+          "text": "Mekânınızı yerinde ölçüyoruz ya da ölçüleri sizden alıyoruz."
+        },
+        {
+          "title": "Teklif",
+          "text": "Ölçülere göre parça parça teklif hazırlıyoruz."
+        },
+        {
+          "title": "Üretim",
+          "text": "Onayınızla atölyemizde üretime başlıyoruz."
+        },
+        {
+          "title": "Teslimat ve montaj",
+          "text": "Kendi ustalarımızla teslim edip kuruyoruz."
+        }
+      ]
+    },
+    "visit": {
+      "title": "Gelin, yerinde görün",
+      "text": "Takımları fotoğraftan değil, yerinde görmenizi isteriz. Mağazamız ve atölyemiz {opens}–{closes} saatleri arasında açık.",
+      "primary": "İletişim bilgileri",
+      "secondary": "Teklif İste"
+    }
+  },
+  "contact": {
+    "eyebrow": "İletişim",
+    "title": "Bize ulaşın",
+    "lead": "Mağazamız, atölyemiz ve depomuz aynı adreste. Takımları görmek için uğrayın ya da bize yazın.",
+    "details": {
+      "title": "İletişim bilgileri",
+      "phone": "Telefon",
+      "email": "E-posta",
+      "address": "Adres",
+      "hours": "Çalışma saatleri"
+    },
+    "abroad": {
+      "title": "Yurt dışından müşterilerimiz",
+      "text": "Yurt dışında montaj yapmıyoruz; bunun yerine kurulumu size öğretiyor ve uzaktan destek veriyoruz.",
+      "items": [
+        {
+          "title": "Gelin, görün",
+          "text": "Takımları mağazamızda yerinde inceleyin."
+        },
+        {
+          "title": "Kurulumu öğrenin",
+          "text": "Kurulumu ekibinize atölyemizde adım adım gösterelim."
+        },
+        {
+          "title": "Görüntülü destek",
+          "text": "Kurulumda takıldığınız yerde görüntülü aramayla yanınızdayız."
+        }
+      ]
+    },
+    "cta": {
+      "title": "Teklif almak ister misiniz?",
+      "text": "İlgilendiğiniz ürünleri ve adetleri formda belirtin; sizi arayalım.",
+      "primary": "Teklif İste"
+    }
+  },
+  "privacy": {
+    "title": "KVKK Aydınlatma Metni",
+    "lead": "6698 sayılı Kişisel Verilerin Korunması Kanunu (KVKK) uyarınca, sitemiz ve teklif formumuz aracılığıyla işlenen kişisel verileriniz hakkında sizi bilgilendiriyoruz.",
+    "updated": "Son güncelleme: {date}",
+    "controller": {
+      "title": "Veri sorumlusu",
+      "text": "Kişisel verileriniz veri sorumlusu sıfatıyla {controller} tarafından işlenir. Bize <email>{address}</email> adresinden ulaşabilirsiniz."
+    },
+    "data": {
+      "title": "Hangi kişisel verileri işliyoruz",
+      "text": "Teklif formunu doldurduğunuzda ya da bize yazdığınızda:",
+      "items": [
+        "Kimlik ve iletişim bilgileri: ad soyad, telefon, e-posta adresi (isteğe bağlı), şehir",
+        "Talep bilgileri: bireysel ya da kurumsal müşteri olduğunuz, firma adı, ilgilendiğiniz ürünler, yaklaşık adet, notunuz ve formu gönderdiğiniz dil",
+        "Güvenlik bilgileri: formu gönderdiğiniz IP adresi, tarayıcı bilgisi ve zaman",
+        "Bize gönderdiğiniz e-postaların içeriği"
+      ]
+    },
+    "purposes": {
+      "title": "Hangi amaçlarla işliyoruz",
+      "items": [
+        "Talebinize dönmek, ihtiyacınızı konuşmak ve teklif hazırlamak",
+        "Satış öncesi görüşmeleri ve sizinle yapılacak sözleşmeyi yürütmek",
+        "Formun ve sitenin kötüye kullanılmasını (otomatik gönderim, saldırı) önlemek",
+        "Yasal yükümlülüklerimizi yerine getirmek"
+      ]
+    },
+    "legalBasis": {
+      "title": "Hukuki sebepler",
+      "text": "Kişisel verilerinizi KVKK'nın 5. maddesinin 2. fıkrasındaki şu sebeplere dayanarak işliyoruz:",
+      "items": [
+        "Bir sözleşmenin kurulması veya ifasıyla doğrudan ilgili olması (c bendi): talebinize dönmek ve teklif hazırlamak",
+        "Veri sorumlusunun hukuki yükümlülüğünü yerine getirmesi (ç bendi)",
+        "Temel hak ve özgürlüklerinize zarar vermemek kaydıyla meşru menfaatimiz (f bendi): formun ve sitenin güvenliği"
+      ],
+      "note": "Size pazarlama iletisi göndermiyoruz; bu nedenle açık rızanızı istemiyoruz."
+    },
+    "collection": {
+      "title": "Toplama yöntemi",
+      "text": "Verilerinizi sitemizdeki teklif formu ve e-posta yoluyla, elektronik ortamda topluyoruz."
+    },
+    "transfer": {
+      "title": "Kimlere aktarıyoruz",
+      "text": "Verilerinizi satmıyor, pazarlama amacıyla kimseyle paylaşmıyoruz. Yalnızca şu durumlarda aktarılır:",
+      "items": [
+        "Kanunen yetkili kamu kurum ve kuruluşlarına, yasal bir zorunluluk olduğunda",
+        "Sitemizi ve e-postamızı çalıştırmak için hizmet aldığımız, sunucuları yurt dışında bulunan sağlayıcılara: barındırma (Hostinger; sunucumuz Fransa'da), ağ ve güvenlik hizmeti (Cloudflare), e-posta (Zoho) ve şifrelenmiş yedekleme (Backblaze; Avrupa Birliği)"
+      ],
+      "note": "Yurt dışına aktarım, KVKK'nın 9. maddesinde öngörülen güvencelere uygun olarak yapılır."
+    },
+    "retention": {
+      "title": "Ne kadar saklıyoruz",
+      "items": [
+        "Satışa dönüşmeyen talepler: talep tarihinden itibaren 2 yıl; süre dolunca kişisel veriler silinir ya da anonim hâle getirilir",
+        "Satışa dönüşen talepler: ticari kayıt olarak 10 yıl (6102 sayılı Türk Ticaret Kanunu, madde 82)",
+        "Güvenlik amaçlı sunucu kayıtları: kısa süreli, dönüşümlü olarak tutulur ve kendiliğinden silinir"
+      ]
+    },
+    "rights": {
+      "title": "Haklarınız",
+      "text": "KVKK'nın 11. maddesi uyarınca şu haklara sahipsiniz:",
+      "items": [
+        "Kişisel verilerinizin işlenip işlenmediğini öğrenme",
+        "İşlenmişse buna ilişkin bilgi talep etme",
+        "İşlenme amacını ve bunların amacına uygun kullanılıp kullanılmadığını öğrenme",
+        "Yurt içinde veya yurt dışında aktarıldığı üçüncü kişileri bilme",
+        "Eksik veya yanlış işlenmişse düzeltilmesini isteme",
+        "KVKK'nın 7. maddesindeki şartlar çerçevesinde silinmesini veya yok edilmesini isteme",
+        "Düzeltme, silme veya yok etme işlemlerinin, verilerin aktarıldığı üçüncü kişilere bildirilmesini isteme",
+        "Yalnızca otomatik sistemlerle analiz edilmesi sonucu aleyhinize bir sonucun ortaya çıkmasına itiraz etme",
+        "Kanuna aykırı işlenmesi sebebiyle zarara uğramanız hâlinde zararın giderilmesini talep etme"
+      ]
+    },
+    "application": {
+      "title": "Başvuru",
+      "text": "Haklarınızla ilgili taleplerinizi <email>{address}</email> adresine yazabilirsiniz. Başvurunuzu en geç 30 gün içinde sonuçlandırırız; başvurular kural olarak ücretsizdir."
+    }
+  },
+  "cookies": {
+    "title": "Çerez Politikası",
+    "lead": "Bu sayfa, sitemizin hangi çerezleri neden kullandığını anlatır.",
+    "updated": "Son güncelleme: {date}",
+    "what": {
+      "title": "Çerez nedir",
+      "text": "Çerezler, bir siteyi ziyaret ettiğinizde tarayıcınıza kaydedilen küçük metin dosyalarıdır."
+    },
+    "used": {
+      "title": "Kullandığımız çerezler",
+      "text": "Sitemiz yalnızca çalışması ve güvenliği için zorunlu olan çerezleri kullanır. Bu çerezler için onayınız gerekmez.",
+      "columns": {
+        "name": "Çerez",
+        "purpose": "Amaç",
+        "duration": "Süre",
+        "provider": "Sağlayan"
+      },
+      "rows": [
+        {
+          "name": "NEXT_LOCALE",
+          "purpose": "Seçtiğiniz dili hatırlar",
+          "duration": "Tarayıcı kapanana kadar",
+          "provider": "BüroKent"
+        },
+        {
+          "name": "__cf_bm",
+          "purpose": "Siteyi otomatik saldırılara karşı korur",
+          "duration": "30 dakika",
+          "provider": "Cloudflare"
+        },
+        {
+          "name": "cf_clearance",
+          "purpose": "Bir güvenlik doğrulamasını geçtiğinizi hatırlar; yalnızca doğrulama gösterilirse kaydedilir",
+          "duration": "Kısa süreli, güvenlik ayarına göre",
+          "provider": "Cloudflare"
+        }
+      ]
+    },
+    "none": {
+      "title": "Kullanmadığımız çerezler",
+      "text": "Analiz, reklam ya da sizi başka sitelerde izleyen çerezler kullanmıyoruz. İleride böyle bir çerez eklersek önce onayınızı isteriz."
+    },
+    "manage": {
+      "title": "Çerezleri yönetme",
+      "text": "Tarayıcınızın ayarlarından çerezleri görebilir ve silebilirsiniz. Zorunlu çerezleri engellerseniz seçtiğiniz dil hatırlanmayabilir."
+    },
+    "more": {
+      "title": "Daha fazla bilgi",
+      "text": "Kişisel verilerinizin nasıl işlendiğini KVKK Aydınlatma Metni'nde anlatıyoruz. Sorularınız için: <email>{address}</email>",
+      "link": "KVKK Aydınlatma Metni"
+    }
   }
 }
