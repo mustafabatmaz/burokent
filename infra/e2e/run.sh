@@ -41,6 +41,15 @@ EOF
 docker network inspect edge >/dev/null 2>&1 || docker network create edge >/dev/null
 "${compose[@]}" up -d --build --wait
 
+# The edge network is shared with other projects (the blog): no service of this stack may answer there to a
+# generic name such as "backend", or another project's lookup of its own "backend" can reach ours
+for name in backend public-web admin-web postgres; do
+  if docker run --rm --network edge alpine:3.20 getent hosts "$name" >/dev/null; then
+    echo "A service of this stack answers to \"$name\" on the shared edge network" >&2
+    exit 1
+  fi
+done
+
 # node_modules lives in an anonymous volume, so the host's own install is left alone. linux/amd64 everywhere, so
 # screenshots taken on a laptop match the ones CI takes.
 docker run --rm --network edge --ipc=host --platform linux/amd64 \

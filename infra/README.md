@@ -128,7 +128,7 @@ docker compose -f infra/compose.prod.yaml exec -T postgres sh -c \
     < /tmp/restore/backup/db/burokent.dump
 docker compose -f infra/compose.prod.yaml up -d --wait
 # The images, into the volume the stack just created (owners kept, so the backend can still write there)
-docker compose -f infra/compose.prod.yaml cp --archive /tmp/restore/backup/media/. backend:/var/lib/burokent/media/
+docker compose -f infra/compose.prod.yaml cp --archive /tmp/restore/backup/media/. burokent-backend:/var/lib/burokent/media/
 ```
 
 ### Uptime
