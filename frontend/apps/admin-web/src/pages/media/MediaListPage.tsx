@@ -58,10 +58,10 @@ export function MediaListPage() {
       </div>
       <div className="flex gap-2" role="group" aria-label={messages.media.title}>
         <FilterChip selected={!filter.archived} onClick={() => update({ [PARAM.archived]: null })}>
-          {messages.common.active}
+          {messages.media.filters.shown}
         </FilterChip>
         <FilterChip selected={filter.archived} onClick={() => update({ [PARAM.archived]: "1" })}>
-          {messages.common.archived}
+          {messages.media.filters.hidden}
         </FilterChip>
       </div>
       <Library
@@ -89,7 +89,7 @@ export function MediaListPage() {
 function FilterChip({ selected, onClick, children }: { selected: boolean; onClick: () => void; children: string }) {
   return (
     <Button
-      variant={selected ? "secondary" : "outline"}
+      variant={selected ? "default" : "outline"}
       size="sm"
       aria-pressed={selected}
       onClick={onClick}

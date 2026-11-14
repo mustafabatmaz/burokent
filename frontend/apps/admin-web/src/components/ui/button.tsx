@@ -11,6 +11,8 @@ export const buttonVariants = cva(
         secondary: "bg-secondary text-secondary-foreground hover:bg-secondary/80",
         ghost: "hover:bg-accent hover:text-accent-foreground",
         outline: "border bg-card hover:bg-accent hover:text-accent-foreground",
+        // Only for actions that cannot be undone; red-700 keeps white text above AA in both themes
+        destructive: "bg-red-700 text-white hover:bg-red-800",
       },
       size: {
         // 44 px: comfortable touch target on phones and tablets

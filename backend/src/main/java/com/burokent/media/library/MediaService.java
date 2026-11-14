@@ -132,6 +132,23 @@ class MediaService {
         events.publishEvent(entry("media.unarchived", asset));
     }
 
+    /**
+     * Removes a hidden image for good: an image still shown on the site cannot be deleted. The files go only after the
+     * record is gone for sure; the activity log keeps who deleted what.
+     */
+    @Transactional
+    void delete(long id) {
+        MediaAsset asset = find(id);
+        if (!asset.isArchived()) {
+            throw new ProblemException(HttpStatus.CONFLICT, "media_not_hidden");
+        }
+        AuditEntry entry = entry("media.deleted", asset).withChange("fileName", asset.getFileName(), null);
+        media.delete(asset);
+        media.flush();
+        removeFilesAfterCommit(asset);
+        events.publishEvent(entry);
+    }
+
     private MediaAsset find(long id) {
         return media.findById(id).orElseThrow(() -> new ProblemException(HttpStatus.NOT_FOUND, "not_found"));
     }
@@ -161,6 +178,16 @@ class MediaService {
                     storage.delete(asset.getFileName());
                     storage.delete(asset.getThumbnailFileName());
                 }
+            }
+        });
+    }
+
+    private void removeFilesAfterCommit(MediaAsset asset) {
+        TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+            @Override
+            public void afterCommit() {
+                storage.delete(asset.getFileName());
+                storage.delete(asset.getThumbnailFileName());
             }
         });
     }

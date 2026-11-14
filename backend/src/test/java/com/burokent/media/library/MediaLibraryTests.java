@@ -3,6 +3,7 @@ package com.burokent.media.library;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.nullValue;
 import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.multipart;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
@@ -42,6 +43,9 @@ class MediaLibraryTests {
 
     @Autowired
     JdbcTemplate jdbc;
+
+    @Autowired
+    MediaStorage storage;
 
     Cookie superAdmin;
 
@@ -168,6 +172,38 @@ class MediaLibraryTests {
                 .andExpect(header().string("Cache-Control", "max-age=31536000, private, immutable"));
         mvc.perform(get(previewThumbnailUrl).cookie(superAdmin)).andExpect(status().isOk());
         mvc.perform(get(previewUrl)).andExpect(status().isUnauthorized());
+    }
+
+    @Test
+    void onlyHiddenImagesCanBeDeletedForGood() throws Exception {
+        String body = upload(TestImages.jpeg(50, 50), "silinecek.jpg")
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        long id = ((Number) JsonPath.read(body, "$.id")).longValue();
+        String previewUrl = JsonPath.read(body, "$.previewUrl");
+
+        call(delete("/api/admin/media/" + id))
+                .andExpect(status().isConflict())
+                .andExpect(jsonPath("$.code").value("media_not_hidden"));
+        mvc.perform(get(previewUrl).cookie(superAdmin)).andExpect(status().isOk());
+
+        call(post("/api/admin/media/" + id + "/archive")).andExpect(status().isNoContent());
+        call(delete("/api/admin/media/" + id)).andExpect(status().isNoContent());
+
+        call(get("/api/admin/media/" + id)).andExpect(status().isNotFound());
+        mvc.perform(get(previewUrl).cookie(superAdmin)).andExpect(status().isNotFound());
+        String fileName = previewUrl.substring(previewUrl.lastIndexOf('/') + 1);
+        assertThat(storage.find(fileName)).isEmpty();
+        assertThat(storage.find(fileName.replace(".jpg", "-400.jpg"))).isEmpty();
+        assertThat(jdbc.queryForObject("select count(*) from media_translations where media_id = ?", Integer.class, id))
+                .isZero();
+        assertThat(jdbc.queryForObject(
+                        "select action from audit_events where entity_type = 'media' and entity_id = ?"
+                                + " order by id desc limit 1",
+                        String.class,
+                        Long.toString(id)))
+                .isEqualTo("media.deleted");
     }
 
     @Test

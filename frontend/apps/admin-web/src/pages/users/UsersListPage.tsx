@@ -17,7 +17,7 @@ function RoleLabel({ user, names }: { user: UserView; names: Record<number, stri
 }
 
 function Status({ user }: { user: UserView }) {
-  return user.archived ? <Badge>{messages.common.archived}</Badge> : <span>{messages.common.active}</span>;
+  return user.archived ? <Badge>{messages.users.status.closed}</Badge> : <span>{messages.users.status.open}</span>;
 }
 
 export function UsersListPage() {

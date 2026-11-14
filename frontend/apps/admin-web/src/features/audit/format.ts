@@ -22,15 +22,16 @@ const SENTENCES: Record<string, (context: Context) => string> = {
   "user.updated": ({ actor, label }) => `${actor}, ${label} kullanıcısının bilgilerini güncelledi`,
   "user.password_reset": ({ actor, label }) => `${actor}, ${label} kullanıcısının şifresini sıfırladı`,
   "user.password_changed": ({ actor }) => `${actor} şifresini değiştirdi`,
-  "user.archived": ({ actor, label }) => `${actor}, ${label} kullanıcısını arşivledi`,
-  "user.unarchived": ({ actor, label }) => `${actor}, ${label} kullanıcısını arşivden çıkardı`,
+  "user.archived": ({ actor, label }) => `${actor}, ${label} kullanıcısının hesabını kapattı`,
+  "user.unarchived": ({ actor, label }) => `${actor}, ${label} kullanıcısının hesabını açtı`,
   "user.sessions_ended": ({ actor, label }) => `${actor}, ${label} kullanıcısının tüm oturumlarını kapattı`,
   "role.created": ({ actor, label }) => `${actor}, “${label}” rolünü oluşturdu`,
   "role.updated": ({ actor, label }) => `${actor}, “${label}” rolünü güncelledi`,
   "media.uploaded": ({ actor, label }) => `${actor}, “${label}” görselini yükledi`,
   "media.updated": ({ actor, label }) => `${actor}, “${label}” görselinin alt metinlerini güncelledi`,
-  "media.archived": ({ actor, label }) => `${actor}, “${label}” görselini arşivledi`,
-  "media.unarchived": ({ actor, label }) => `${actor}, “${label}” görselini arşivden çıkardı`,
+  "media.archived": ({ actor, label }) => `${actor}, “${label}” görselini sitede gizledi`,
+  "media.unarchived": ({ actor, label }) => `${actor}, “${label}” görselini tekrar sitede gösterdi`,
+  "media.deleted": ({ actor, label }) => `${actor}, “${label}” görselini kalıcı olarak sildi`,
 };
 
 /** A readable Turkish sentence for an activity entry; unknown actions fall back to the action code. */
