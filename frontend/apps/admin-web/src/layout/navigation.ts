@@ -1,4 +1,4 @@
-import { History, LayoutDashboard, Users, type LucideIcon } from "lucide-react";
+import { History, Image, LayoutDashboard, Users, type LucideIcon } from "lucide-react";
 import { messages } from "../messages.ts";
 
 export interface NavItem {
@@ -35,6 +35,11 @@ export const NAVIGATION: NavGroup[] = [
         tabLabel: messages.layout.dashboardTab,
       },
     ],
+  },
+  {
+    id: "site-content",
+    label: messages.layout.groups.siteContent,
+    items: [{ to: "/medya", label: messages.media.title, icon: Image, permission: "media.read" }],
   },
   {
     id: "system",

@@ -72,6 +72,21 @@ export const routes: RouteObject[] = [
             ]),
           },
           {
+            path: "medya",
+            ...guarded("media.read", [
+              {
+                index: true,
+                lazy: async () => ({ Component: (await import("./pages/media/MediaListPage.tsx")).MediaListPage }),
+              },
+              {
+                path: ":id",
+                lazy: async () => ({
+                  Component: (await import("./pages/media/MediaDetailPage.tsx")).MediaDetailPage,
+                }),
+              },
+            ]),
+          },
+          {
             path: "hesap/sifre",
             lazy: async () => ({
               Component: (await import("./pages/account/ChangePasswordPage.tsx")).ChangePasswordPage,

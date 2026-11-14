@@ -21,6 +21,22 @@ describe("formatAuditEvent", () => {
     expect(formatAuditEvent(anonymous)).toBe("“depo-sorumlusu” kullanıcı adıyla başarısız giriş denemesi");
   });
 
+  it("names images by the file they were uploaded from", () => {
+    const image = { ...base, entityType: "media", entityLabel: "hilal-makam.jpg" };
+    expect(formatAuditEvent({ ...image, action: "media.uploaded" })).toBe(
+      "Yönetici Kişi, “hilal-makam.jpg” görselini yükledi",
+    );
+    expect(formatAuditEvent({ ...image, action: "media.updated" })).toBe(
+      "Yönetici Kişi, “hilal-makam.jpg” görselinin alt metinlerini güncelledi",
+    );
+    expect(formatAuditEvent({ ...image, action: "media.archived" })).toBe(
+      "Yönetici Kişi, “hilal-makam.jpg” görselini arşivledi",
+    );
+    expect(formatAuditEvent({ ...image, action: "media.unarchived" })).toBe(
+      "Yönetici Kişi, “hilal-makam.jpg” görselini arşivden çıkardı",
+    );
+  });
+
   it("falls back to the action code for unknown actions", () => {
     expect(formatAuditEvent({ ...base, action: "stock.adjusted" })).toBe("Yönetici Kişi: stock.adjusted");
   });

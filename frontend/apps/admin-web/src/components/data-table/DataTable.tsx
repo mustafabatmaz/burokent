@@ -184,7 +184,7 @@ export function DataTable<T>({
   );
 }
 
-function Pager({ pagination }: { pagination: ServerPagination }) {
+export function Pager({ pagination }: { pagination: ServerPagination }) {
   const pages = Math.max(1, Math.ceil(pagination.total / pagination.size));
   return (
     <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-3 text-sm">

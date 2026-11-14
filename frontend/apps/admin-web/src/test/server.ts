@@ -24,10 +24,29 @@ export const SUPER_ADMIN: FakeUser = {
   username: "admin",
   displayName: "Süper Yönetici",
   superAdmin: true,
-  permissions: ["audit.read", "identity.manage", "identity.read"],
+  permissions: ["audit.read", "identity.manage", "identity.read", "media.manage", "media.read"],
 };
 
 export const MANAGER: FakeUser = { ...TEST_USER, permissions: ["audit.read", "identity.read"] };
+
+export const MEDIA_VIEWER: FakeUser = { ...TEST_USER, permissions: ["media.read"] };
+
+export interface FakeMedia {
+  id: number;
+  url: string;
+  thumbnailUrl: string;
+  previewUrl: string;
+  previewThumbnailUrl: string;
+  contentType: string;
+  width: number;
+  height: number;
+  byteSize: number;
+  originalFileName: string;
+  altText: { tr?: string; en?: string; ar?: string };
+  archived: boolean;
+  createdAt: string;
+  version: number;
+}
 
 export interface FakeUserRecord {
   id: number;
@@ -86,6 +105,33 @@ function initialRoles(): FakeRole[] {
   ];
 }
 
+function fakeMedia(id: number, originalFileName: string, altText: FakeMedia["altText"], createdAt: string): FakeMedia {
+  const name = `00000000-0000-0000-0000-${String(id).padStart(12, "0")}`;
+  return {
+    id,
+    url: `/api/public/media/${name}.jpg`,
+    thumbnailUrl: `/api/public/media/${name}-400.jpg`,
+    previewUrl: `/api/admin/media/files/${name}.jpg`,
+    previewThumbnailUrl: `/api/admin/media/files/${name}-400.jpg`,
+    contentType: "image/jpeg",
+    width: 3000,
+    height: 2000,
+    byteSize: 1_250_000,
+    originalFileName,
+    altText,
+    archived: false,
+    createdAt,
+    version: 0,
+  };
+}
+
+function initialMedia(): FakeMedia[] {
+  return [
+    fakeMedia(1, "hilal-makam.jpg", { tr: "Hilal makam masası" }, "2026-11-10T09:00:00Z"),
+    fakeMedia(2, "atolye.jpg", {}, "2026-11-12T09:00:00Z"),
+  ];
+}
+
 function initialAudit(): FakeAuditEvent[] {
   return [
     {
@@ -120,6 +166,7 @@ export const backend = {
   users: initialUsers(),
   roles: initialRoles(),
   audit: initialAudit(),
+  media: initialMedia(),
   calls: [] as { method: string; path: string; body?: unknown; query?: string }[],
 };
 
@@ -132,6 +179,7 @@ export function resetBackend(): void {
   backend.users = initialUsers();
   backend.roles = initialRoles();
   backend.audit = initialAudit();
+  backend.media = initialMedia();
   backend.calls = [];
 }
 
@@ -295,6 +343,63 @@ export const server = setupServer(
     Object.assign(role, { name: body.name, description: body.description, permissions: body.permissions });
     role.version++;
     return HttpResponse.json(role);
+  }),
+  http.get("*/api/admin/media", ({ request }) => {
+    const url = new URL(request.url);
+    record("GET", request);
+    const archived = url.searchParams.get("archived") === "true";
+    const page = Number(url.searchParams.get("page") ?? "0");
+    const size = Number(url.searchParams.get("size") ?? "48");
+    const matching = backend.media
+      .filter((media) => media.archived === archived)
+      .sort((a, b) => b.createdAt.localeCompare(a.createdAt));
+    return HttpResponse.json({
+      content: matching.slice(page * size, (page + 1) * size),
+      page: { size, number: page, totalElements: matching.length, totalPages: Math.ceil(matching.length / size) },
+    });
+  }),
+  http.get("*/api/admin/media/:id", ({ params }) => {
+    const media = backend.media.find((candidate) => candidate.id === Number(params.id));
+    return media ? HttpResponse.json(media) : problem(404, "not_found");
+  }),
+  http.post("*/api/admin/media", async ({ request }) => {
+    const file = (await request.formData()).get("file");
+    if (!(file instanceof File)) {
+      return problem(400, "bad_request");
+    }
+    record("POST", request, { fileName: file.name, size: file.size });
+    if (file.name.startsWith("bad")) {
+      return problem(400, "media_type_unsupported");
+    }
+    const id = 100 + backend.media.length;
+    const media = fakeMedia(id, file.name, {}, new Date(Date.UTC(2026, 10, 14, 10, id)).toISOString());
+    backend.media.push(media);
+    return HttpResponse.json(media, { status: 201 });
+  }),
+  http.put("*/api/admin/media/:id", async ({ params, request }) => {
+    const body = (await request.json()) as { altText: FakeMedia["altText"]; version: number };
+    record("PUT", request, body);
+    const media = backend.media.find((candidate) => candidate.id === Number(params.id));
+    if (!media) {
+      return problem(404, "not_found");
+    }
+    if (media.version !== body.version) {
+      return problem(409, "conflict");
+    }
+    media.altText = Object.fromEntries(
+      Object.entries(body.altText).filter((entry): entry is [string, string] => Boolean(entry[1]?.trim())),
+    );
+    media.version++;
+    return HttpResponse.json(media);
+  }),
+  http.post("*/api/admin/media/:id/:action", ({ params, request }) => {
+    record("POST", request);
+    const media = backend.media.find((candidate) => candidate.id === Number(params.id));
+    if (!media) {
+      return problem(404, "not_found");
+    }
+    media.archived = params.action === "archive";
+    return new HttpResponse(null, { status: 204 });
   }),
   http.get("*/api/admin/audit-events", ({ request }) => {
     const url = new URL(request.url);
