@@ -15,7 +15,7 @@ const base = {
 describe("formatAuditEvent", () => {
   it("builds a Turkish sentence", () => {
     expect(formatAuditEvent({ ...base, action: "user.archived" })).toBe(
-      "Yönetici Kişi, depo-sorumlusu kullanıcısını arşivledi",
+      "Yönetici Kişi, depo-sorumlusu kullanıcısının hesabını kapattı",
     );
     const anonymous = { action: "auth.login_failed", entityLabel: "depo-sorumlusu" };
     expect(formatAuditEvent(anonymous)).toBe("“depo-sorumlusu” kullanıcı adıyla başarısız giriş denemesi");
@@ -30,10 +30,13 @@ describe("formatAuditEvent", () => {
       "Yönetici Kişi, “hilal-makam.jpg” görselinin alt metinlerini güncelledi",
     );
     expect(formatAuditEvent({ ...image, action: "media.archived" })).toBe(
-      "Yönetici Kişi, “hilal-makam.jpg” görselini arşivledi",
+      "Yönetici Kişi, “hilal-makam.jpg” görselini sitede gizledi",
     );
     expect(formatAuditEvent({ ...image, action: "media.unarchived" })).toBe(
-      "Yönetici Kişi, “hilal-makam.jpg” görselini arşivden çıkardı",
+      "Yönetici Kişi, “hilal-makam.jpg” görselini tekrar sitede gösterdi",
+    );
+    expect(formatAuditEvent({ ...image, action: "media.deleted" })).toBe(
+      "Yönetici Kişi, “hilal-makam.jpg” görselini kalıcı olarak sildi",
     );
   });
 

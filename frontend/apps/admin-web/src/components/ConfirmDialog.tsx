@@ -12,6 +12,7 @@ export function ConfirmDialog({
   cancelLabel = messages.common.cancel,
   onConfirm,
   onCancel,
+  destructive = false,
   children,
 }: {
   open: boolean;
@@ -21,6 +22,8 @@ export function ConfirmDialog({
   cancelLabel?: string;
   onConfirm: () => void;
   onCancel: () => void;
+  /** Red confirm button, for something that cannot be undone. */
+  destructive?: boolean;
   children?: ReactNode;
 }) {
   return (
@@ -39,7 +42,9 @@ export function ConfirmDialog({
             <Button variant="outline" onClick={onCancel}>
               {cancelLabel}
             </Button>
-            <Button onClick={onConfirm}>{confirmLabel}</Button>
+            <Button variant={destructive ? "destructive" : "default"} onClick={onConfirm}>
+              {confirmLabel}
+            </Button>
           </div>
         </AlertDialog.Popup>
       </AlertDialog.Portal>

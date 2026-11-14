@@ -2,7 +2,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { ExternalLink } from "lucide-react";
 import { useId, useRef, useState, type KeyboardEvent } from "react";
 import { useForm, type UseFormReturn } from "react-hook-form";
-import { useParams } from "react-router";
+import { useNavigate, useParams } from "react-router";
 import { Can } from "../../auth/Can.tsx";
 import { useSession } from "../../auth/session.tsx";
 import { ConfirmDialog } from "../../components/ConfirmDialog.tsx";
@@ -56,7 +56,7 @@ export function MediaDetailPage() {
     <div className="flex flex-col gap-6">
       <div className="flex flex-wrap items-center gap-2">
         <h1 className="text-xl font-semibold break-all">{item.originalFileName}</h1>
-        {item.archived && <Badge>{messages.common.archived}</Badge>}
+        {item.archived && <Badge>{messages.media.hidden}</Badge>}
       </div>
       <Card className="grid gap-4 p-4 md:grid-cols-[minmax(0,2fr)_minmax(0,1fr)] md:p-6">
         <img
@@ -244,16 +244,17 @@ function LocaleTabs({ form, saved }: { form: UseFormReturn<Values>; saved: Media
 
 function ArchiveAction({ media }: { media: MediaView }) {
   const queryClient = useQueryClient();
+  const navigate = useNavigate();
   const toast = useToast();
-  const [open, setOpen] = useState(false);
+  const [confirm, setConfirm] = useState<"archive" | "delete" | null>(null);
   const a = messages.media.actions;
+  const path = { params: { path: { id: media.id } } };
 
-  async function run() {
-    const path = { params: { path: { id: media.id } } };
+  async function toggle() {
     const result = media.archived
       ? await api.POST("/api/admin/media/{id}/unarchive", path)
       : await api.POST("/api/admin/media/{id}/archive", path);
-    setOpen(false);
+    setConfirm(null);
     if (!result.response.ok) {
       toast.error(errorText(asProblem(result.error).code));
       return;
@@ -263,18 +264,52 @@ function ArchiveAction({ media }: { media: MediaView }) {
     toast.success(media.archived ? messages.media.unarchivedToast : messages.media.archivedToast);
   }
 
+  async function remove() {
+    const result = await api.DELETE("/api/admin/media/{id}", path);
+    setConfirm(null);
+    if (!result.response.ok) {
+      toast.error(errorText(asProblem(result.error).code));
+      return;
+    }
+    queryClient.removeQueries({ queryKey: mediaQuery(media.id).queryKey });
+    await queryClient.invalidateQueries({ queryKey: ["media", "list"] });
+    toast.success(messages.media.deletedToast);
+    await navigate("/medya?arsiv=1");
+  }
+
   return (
-    <Card className="flex flex-col gap-2 p-4 sm:flex-row md:p-6">
-      <Button variant="outline" onClick={() => (media.archived ? void run() : setOpen(true))}>
-        {media.archived ? a.unarchive : a.archive}
-      </Button>
+    <Card className="flex flex-col gap-3 p-4 md:p-6">
+      <div className="flex flex-col gap-2 sm:flex-row">
+        <Button variant="outline" onClick={() => (media.archived ? void toggle() : setConfirm("archive"))}>
+          {media.archived ? a.unarchive : a.archive}
+        </Button>
+        {media.archived && (
+          <Button
+            variant="outline"
+            className="border-destructive text-destructive hover:bg-destructive/10 hover:text-destructive"
+            onClick={() => setConfirm("delete")}
+          >
+            {a.delete}
+          </Button>
+        )}
+      </div>
+      {!media.archived && <p className="text-sm text-muted-foreground">{messages.media.deleteHint}</p>}
       <ConfirmDialog
-        open={open}
+        open={confirm === "archive"}
         title={messages.media.confirmArchive}
         description={messages.media.confirmArchiveDescription}
         confirmLabel={a.archive}
-        onConfirm={() => void run()}
-        onCancel={() => setOpen(false)}
+        onConfirm={() => void toggle()}
+        onCancel={() => setConfirm(null)}
+      />
+      <ConfirmDialog
+        open={confirm === "delete"}
+        title={messages.media.confirmDelete}
+        description={messages.media.confirmDeleteDescription}
+        confirmLabel={a.delete}
+        destructive
+        onConfirm={() => void remove()}
+        onCancel={() => setConfirm(null)}
       />
     </Card>
   );

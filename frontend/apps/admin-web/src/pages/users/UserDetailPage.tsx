@@ -69,7 +69,7 @@ function UserHeader({ user }: { user: UserView }) {
       <h2 className="text-xl font-semibold">{user.displayName}</h2>
       <span className="text-muted-foreground">{user.username}</span>
       {user.superAdmin && <Badge variant="primary">{messages.users.superAdmin}</Badge>}
-      {user.archived && <Badge>{messages.common.archived}</Badge>}
+      {user.archived && <Badge>{messages.users.status.closed}</Badge>}
     </div>
   );
 }

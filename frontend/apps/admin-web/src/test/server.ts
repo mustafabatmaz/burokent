@@ -392,6 +392,18 @@ export const server = setupServer(
     media.version++;
     return HttpResponse.json(media);
   }),
+  http.delete("*/api/admin/media/:id", ({ params, request }) => {
+    record("DELETE", request);
+    const media = backend.media.find((candidate) => candidate.id === Number(params.id));
+    if (!media) {
+      return problem(404, "not_found");
+    }
+    if (!media.archived) {
+      return problem(409, "media_not_hidden");
+    }
+    backend.media = backend.media.filter((candidate) => candidate !== media);
+    return new HttpResponse(null, { status: 204 });
+  }),
   http.post("*/api/admin/media/:id/:action", ({ params, request }) => {
     record("POST", request);
     const media = backend.media.find((candidate) => candidate.id === Number(params.id));

@@ -717,6 +717,24 @@
       }
     },
     "/api/admin/media/{id}" : {
+      "delete" : {
+        "operationId" : "delete",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "id",
+          "required" : true,
+          "schema" : {
+            "format" : "int64",
+            "type" : "integer"
+          }
+        } ],
+        "responses" : {
+          "204" : {
+            "description" : "No Content"
+          }
+        },
+        "tags" : [ "media-controller" ]
+      },
       "get" : {
         "operationId" : "get_2",
         "parameters" : [ {

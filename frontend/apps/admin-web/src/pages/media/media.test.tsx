@@ -136,6 +136,33 @@ describe("media library", () => {
     });
   });
 
+  it("deletes only hidden images, after confirmation", async () => {
+    backend.media.find((media) => media.id === 2)!.archived = true;
+    logIn(SUPER_ADMIN);
+    const { router } = renderApp("/medya/2");
+    const user = userEvent.setup();
+
+    await user.click(await screen.findByRole("button", { name: messages.media.actions.delete }));
+    const dialog = await screen.findByRole("alertdialog");
+    expect(dialog).toHaveTextContent(messages.media.confirmDelete);
+    expect(dialog).toHaveTextContent(messages.media.confirmDeleteDescription);
+    await user.click(within(dialog).getByRole("button", { name: messages.media.actions.delete }));
+
+    expect(await screen.findByText(messages.media.deletedToast)).toBeInTheDocument();
+    expect(backend.calls.some((call) => call.method === "DELETE" && call.path === "/api/admin/media/2")).toBe(true);
+    await waitFor(() => expect(router.state.location.pathname).toBe("/medya"));
+    expect(router.state.location.search).toBe("?arsiv=1");
+  });
+
+  it("offers no delete for an image shown on the site, only a hint", async () => {
+    logIn(SUPER_ADMIN);
+    renderApp("/medya/1");
+
+    expect(await screen.findByRole("button", { name: messages.media.actions.archive })).toBeInTheDocument();
+    expect(screen.queryByRole("button", { name: messages.media.actions.delete })).not.toBeInTheDocument();
+    expect(screen.getByText(messages.media.deleteHint)).toBeInTheDocument();
+  });
+
   it("archives an image after confirmation", async () => {
     logIn(SUPER_ADMIN);
     renderApp("/medya/2");
