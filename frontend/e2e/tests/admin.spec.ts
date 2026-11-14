@@ -44,4 +44,14 @@ test.describe("admin panel", () => {
     await page.goto(PANEL + "/kullanicilar");
     await expect(page.getByRole("heading", { name: "Bu sayfayı görme yetkiniz yok" })).toBeVisible();
   });
+
+  test("reports the backend's health for uptime monitoring, without details", async ({ request }) => {
+    const response = await request.get(PANEL + "/api/health");
+
+    expect(response.status()).toBe(200);
+    const health = (await response.json()) as Record<string, unknown>;
+    expect(health.status).toBe("UP");
+    expect(health).not.toHaveProperty("components");
+    expect(health).not.toHaveProperty("details");
+  });
 });

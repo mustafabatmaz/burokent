@@ -84,3 +84,52 @@ Use another project name so the development database is not touched, and a local
 docker network create edge
 docker compose -p burokent-prodcheck -f infra/compose.prod.yaml up -d --build --wait
 ```
+
+## Backups and monitoring
+
+Every night `backup/backup.sh` dumps the database (`pg_dump`, custom format) and sends it with
+[restic](https://restic.net) to a private Backblaze B2 bucket. restic encrypts on the server, uploads only what
+changed and keeps 7 daily, 4 weekly, 12 monthly and 5 yearly snapshots; on Sundays it also checks what is stored.
+The latest dump stays on the server too (`~/backups/burokent/db/`). A systemd timer starts it at 03:30 Turkish
+time, and [healthchecks.io](https://healthchecks.io) mails when a night passes without a successful run.
+
+Secrets live only in `~/.config/burokent-backup.env` on the server (`chmod 600`; see
+`backup/burokent-backup.env.example`). Keep the restic password and the server's `infra/.env` in a password
+manager as well: without the password the backups cannot be read.
+
+### Setup on the server
+
+```bash
+cp infra/backup/burokent-backup.env.example ~/.config/burokent-backup.env   # fill in, then chmod 600
+docker run --rm --env-file ~/.config/burokent-backup.env restic/restic:0.19.1 init
+infra/backup/backup.sh                                                       # first backup by hand
+sudo cp infra/backup/burokent-backup.service infra/backup/burokent-backup.timer /etc/systemd/system/
+sudo systemctl daemon-reload && sudo systemctl enable --now burokent-backup.timer
+infra/backup/restore-check.sh                                                # prove it restores
+```
+
+Day to day: `systemctl list-timers burokent-backup.timer`, `journalctl -u burokent-backup.service -n 30`, a backup
+right now with `sudo systemctl start burokent-backup.service`. Run `restore-check.sh` every few months: it
+restores the latest snapshot into a throwaway PostgreSQL and counts what came back, without touching the stack.
+
+### Restoring onto a new server
+
+Start only PostgreSQL first: its init script creates the owner and application users and leaves the database
+empty. Restore as the schema owner, so ownership, grants and the append-only protection come back as they were,
+then start the rest; the backend finds its migrations already applied.
+
+```bash
+docker compose -f infra/compose.prod.yaml up -d --wait postgres
+docker run --rm --env-file ~/.config/burokent-backup.env -v /tmp/restore:/restore restic/restic:0.19.1 \
+    restore latest --host burokent-vps --target /restore
+docker compose -f infra/compose.prod.yaml exec -T postgres sh -c \
+    'pg_restore -U postgres -d "$POSTGRES_DB" --no-owner --role="$DB_OWNER_USER" --exit-on-error' \
+    < /tmp/restore/backup/db/burokent.dump
+docker compose -f infra/compose.prod.yaml up -d --wait
+```
+
+### Uptime
+
+An external monitor checks `https://panel.burokent.com` (the panel itself) and `https://panel.burokent.com/api/health`,
+which the panel's nginx passes to the backend's health endpoint: `"status":"UP"` without any component details, or
+503 when the backend or the database is down. No other actuator endpoint is reachable from outside.
