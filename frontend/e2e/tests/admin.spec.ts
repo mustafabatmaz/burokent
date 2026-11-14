@@ -49,6 +49,9 @@ test.describe("admin panel", () => {
     const response = await request.get(PANEL + "/api/health");
 
     expect(response.status()).toBe(200);
-    expect(await response.json()).toEqual({ status: "UP" });
+    const health = (await response.json()) as Record<string, unknown>;
+    expect(health.status).toBe("UP");
+    expect(health).not.toHaveProperty("components");
+    expect(health).not.toHaveProperty("details");
   });
 });

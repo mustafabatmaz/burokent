@@ -131,5 +131,5 @@ docker compose -f infra/compose.prod.yaml up -d --wait
 ### Uptime
 
 An external monitor checks `https://panel.burokent.com` (the panel itself) and `https://panel.burokent.com/api/health`,
-which the panel's nginx passes to the backend's health endpoint: `{"status":"UP"}`, or 503 when the backend or the
-database is down. No other actuator endpoint is reachable from outside.
+which the panel's nginx passes to the backend's health endpoint: `"status":"UP"` without any component details, or
+503 when the backend or the database is down. No other actuator endpoint is reachable from outside.
