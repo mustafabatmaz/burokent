@@ -8,11 +8,9 @@ on:
       # OpenApiSpecTests compares the API with the specs committed here
       - "frontend/packages/api-client/openapi/**"
       - ".github/workflows/backend.yml"
+  # Every pull request, whatever it changes: main's protection requires this check, and a check that never
+  # starts would keep the pull request waiting forever
   pull_request:
-    paths:
-      - "backend/**"
-      - "frontend/packages/api-client/openapi/**"
-      - ".github/workflows/backend.yml"
 
 concurrency:
   group: backend-${{ github.ref }}

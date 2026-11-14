@@ -6,10 +6,9 @@ on:
     paths:
       - "frontend/**"
       - ".github/workflows/frontend.yml"
+  # Every pull request, whatever it changes: main's protection requires this check, and a check that never
+  # starts would keep the pull request waiting forever
   pull_request:
-    paths:
-      - "frontend/**"
-      - ".github/workflows/frontend.yml"
 
 concurrency:
   group: frontend-${{ github.ref }}
