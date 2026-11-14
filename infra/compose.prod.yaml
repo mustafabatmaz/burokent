@@ -51,6 +51,8 @@ services:
       DB_APP_PASSWORD: ${DB_APP_PASSWORD:?}
       JWT_SECRET: ${JWT_SECRET:?}
       MEDIA_ROOT: /var/lib/burokent/media
+      # Optional: the central bank's EVDS key for the gold price on the panel's start page
+      EVDS_API_KEY: ${EVDS_API_KEY:-}
       # Only needed for the very first start, which creates the super admin
       BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-}
       BOOTSTRAP_ADMIN_PASSWORD_HASH: ${BOOTSTRAP_ADMIN_PASSWORD_HASH:-}

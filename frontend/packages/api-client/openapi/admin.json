@@ -149,6 +149,12 @@
       },
       "DashboardView" : {
         "properties" : {
+          "gold" : {
+            "$ref" : "#/components/schemas/GoldView"
+          },
+          "goldConfigured" : {
+            "type" : "boolean"
+          },
           "location" : {
             "type" : "string"
           },
@@ -159,7 +165,7 @@
             "$ref" : "#/components/schemas/WeatherView"
           }
         },
-        "required" : [ "location" ],
+        "required" : [ "goldConfigured", "location" ],
         "type" : "object"
       },
       "DayView" : {
@@ -179,6 +185,26 @@
           }
         },
         "required" : [ "date", "max", "min", "symbol" ],
+        "type" : "object"
+      },
+      "GoldView" : {
+        "properties" : {
+          "date" : {
+            "format" : "date",
+            "type" : "string"
+          },
+          "fetchedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "perGram" : {
+            "type" : "string"
+          },
+          "previousPerGram" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "date", "fetchedAt", "perGram" ],
         "type" : "object"
       },
       "LoginRequest" : {

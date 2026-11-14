@@ -48,5 +48,15 @@ final class Fixtures {
             ]}}
             """;
 
+    /** The last business day has no value yet (published later in the day). */
+    static final String EVDS_GOLD = """
+            {"totalCount":4,"items":[
+             {"Tarih":"11-11-2026","TP_ALTINPIYASA_KAP02":"6525000.00000000","UNIXTIME":{"$numberLong":"1794344400"}},
+             {"Tarih":"12-11-2026","TP_ALTINPIYASA_KAP02":"6379000.00000000","UNIXTIME":{"$numberLong":"1794430800"}},
+             {"Tarih":"13-11-2026","TP_ALTINPIYASA_KAP02":"6321000.00000000","UNIXTIME":{"$numberLong":"1794517200"}},
+             {"Tarih":"16-11-2026","TP_ALTINPIYASA_KAP02":null,"UNIXTIME":{"$numberLong":"1794776400"}}
+            ]}
+            """;
+
     private Fixtures() {}
 }

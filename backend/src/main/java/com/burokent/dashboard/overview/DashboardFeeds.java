@@ -3,6 +3,7 @@ package com.burokent.dashboard.overview;
 import java.net.http.HttpClient;
 import java.time.Clock;
 import java.time.Duration;
+import java.time.LocalDate;
 import java.util.Optional;
 import java.util.concurrent.atomic.AtomicReference;
 import lombok.extern.slf4j.Slf4j;
@@ -31,6 +32,7 @@ class DashboardFeeds {
     private final Clock clock;
     private final AtomicReference<Snapshot<ExchangeRates>> rates = new AtomicReference<>();
     private final AtomicReference<Snapshot<Weather>> weather = new AtomicReference<>();
+    private final AtomicReference<Snapshot<Gold>> gold = new AtomicReference<>();
 
     @Autowired
     DashboardFeeds(DashboardProperties properties, JsonMapper json, Clock clock) {
@@ -62,6 +64,40 @@ class DashboardFeeds {
 
     Optional<Snapshot<Weather>> weather() {
         return Optional.ofNullable(weather.get());
+    }
+
+    Optional<Snapshot<Gold>> gold() {
+        return Optional.ofNullable(gold.get());
+    }
+
+    boolean goldConfigured() {
+        return properties.hasEvdsKey();
+    }
+
+    /**
+     * Borsa İstanbul's closing price, through the central bank's EVDS: once a business day. The last ten days cover
+     * weekends and holidays; the key goes in a header, never in the address, so it stays out of any log.
+     */
+    @Scheduled(initialDelay = 15_000, fixedDelayString = "PT1H")
+    void refreshGold() {
+        if (!properties.enabled() || !properties.hasEvdsKey()) {
+            return;
+        }
+        LocalDate today = LocalDate.ofInstant(clock.instant(), MetNoWeather.TURKEY);
+        try {
+            String body = http.get()
+                    .uri(
+                            properties.goldUrl() + "series={series}&startDate={start}&endDate={end}&type=json",
+                            EvdsGold.SERIES,
+                            today.minusDays(10).format(EvdsGold.DATE),
+                            today.format(EvdsGold.DATE))
+                    .header("key", properties.evdsKey())
+                    .retrieve()
+                    .body(String.class);
+            gold.set(new Snapshot<>(EvdsGold.parse(json, body == null ? "" : body), clock.instant()));
+        } catch (RestClientException | FeedException e) {
+            log.warn("Gold price not refreshed: {}", reason(e));
+        }
     }
 
     /** The central bank publishes once a working day, in the afternoon; half-hourly is plenty. */

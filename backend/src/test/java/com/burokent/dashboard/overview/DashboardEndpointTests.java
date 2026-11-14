@@ -42,6 +42,8 @@ class DashboardEndpointTests {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.rates").doesNotExist())
                 .andExpect(jsonPath("$.weather").doesNotExist())
+                .andExpect(jsonPath("$.gold").doesNotExist())
+                .andExpect(jsonPath("$.goldConfigured").value(false))
                 .andExpect(jsonPath("$.location").value("Antakya"));
     }
 

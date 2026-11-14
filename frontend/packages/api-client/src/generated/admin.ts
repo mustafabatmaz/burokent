@@ -402,6 +402,8 @@ export interface components {
             username: string;
         };
         DashboardView: {
+            gold?: components["schemas"]["GoldView"];
+            goldConfigured: boolean;
             location: string;
             rates?: components["schemas"]["RatesView"];
             weather?: components["schemas"]["WeatherView"];
@@ -412,6 +414,14 @@ export interface components {
             max: number;
             min: number;
             symbol: string;
+        };
+        GoldView: {
+            /** Format: date */
+            date: string;
+            /** Format: date-time */
+            fetchedAt: string;
+            perGram: string;
+            previousPerGram?: string;
         };
         LoginRequest: {
             password: string;

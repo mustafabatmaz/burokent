@@ -27,6 +27,15 @@ export const messages = {
       source: (date: string) => `Kaynak: TCMB, ${date} kurları. Günde bir kez yayımlanır; anlık piyasa kuru değildir.`,
       unavailable: "Kurlar şu an alınamadı; biraz sonra tekrar denenecek.",
     },
+    gold: {
+      title: "Altın",
+      perGram: "Has altın (gram)",
+      change: (percent: string, previous: string) => `Önceki kapanışa göre ${percent} (${previous})`,
+      source: (date: string) =>
+        `Kaynak: TCMB EVDS, Borsa İstanbul kapanış fiyatı, ${date}. 1000/1000 has altın; kuyumcu satış fiyatı değildir.`,
+      notConfigured: "Altın fiyatı için EVDS anahtarı sunucuya henüz eklenmedi.",
+      unavailable: "Altın fiyatı şu an alınamadı; biraz sonra tekrar denenecek.",
+    },
     weather: {
       title: (place: string) => `Hava durumu · ${place}`,
       now: "Şu an",

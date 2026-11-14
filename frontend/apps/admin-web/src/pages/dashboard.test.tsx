@@ -18,6 +18,26 @@ describe("dashboard", () => {
     expect(screen.getByText(messages.dashboard.rates.source("13 Kasım 2026"))).toBeInTheDocument();
   });
 
+  it("shows the gold price per gram, its change and its source", async () => {
+    logIn(TEST_USER);
+    renderApp("/");
+
+    const gold = await screen.findByRole("region", { name: messages.dashboard.gold.title });
+    expect(gold).toHaveTextContent("6.321,00 ₺");
+    expect(gold).toHaveTextContent(messages.dashboard.gold.change("-%0,91", "6.379,00 ₺"));
+    expect(gold).toHaveTextContent(messages.dashboard.gold.source("13 Kasım 2026"));
+  });
+
+  it("explains a missing gold price until the server has its key", async () => {
+    backend.dashboard.gold = undefined;
+    backend.dashboard.goldConfigured = false;
+    logIn(TEST_USER);
+    renderApp("/");
+
+    const gold = await screen.findByRole("region", { name: messages.dashboard.gold.title });
+    expect(gold).toHaveTextContent(messages.dashboard.gold.notConfigured);
+  });
+
   it("shows the weather now and for the coming days, with its source", async () => {
     logIn(TEST_USER);
     renderApp("/");
