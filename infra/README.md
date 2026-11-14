@@ -87,7 +87,8 @@ docker compose -p burokent-prodcheck -f infra/compose.prod.yaml up -d --build --
 
 ## Backups and monitoring
 
-Every night `backup/backup.sh` dumps the database (`pg_dump`, custom format) and sends it with
+Every night `backup/backup.sh` dumps the database (`pg_dump`, custom format) and sends it, together with the
+uploaded images (the `burokent_media` volume, read-only), with
 [restic](https://restic.net) to a private Backblaze B2 bucket. restic encrypts on the server, uploads only what
 changed and keeps 7 daily, 4 weekly, 12 monthly and 5 yearly snapshots; on Sundays it also checks what is stored.
 The latest dump stays on the server too (`~/backups/burokent/db/`). A systemd timer starts it at 03:30 Turkish
@@ -126,6 +127,8 @@ docker compose -f infra/compose.prod.yaml exec -T postgres sh -c \
     'pg_restore -U postgres -d "$POSTGRES_DB" --no-owner --role="$DB_OWNER_USER" --exit-on-error' \
     < /tmp/restore/backup/db/burokent.dump
 docker compose -f infra/compose.prod.yaml up -d --wait
+# The images, into the volume the stack just created (owners kept, so the backend can still write there)
+docker compose -f infra/compose.prod.yaml cp --archive /tmp/restore/backup/media/. backend:/var/lib/burokent/media/
 ```
 
 ### Uptime

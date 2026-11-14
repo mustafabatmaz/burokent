@@ -50,9 +50,13 @@ services:
       DB_APP_USER: ${DB_APP_USER:?}
       DB_APP_PASSWORD: ${DB_APP_PASSWORD:?}
       JWT_SECRET: ${JWT_SECRET:?}
+      MEDIA_ROOT: /var/lib/burokent/media
       # Only needed for the very first start, which creates the super admin
       BOOTSTRAP_ADMIN_USERNAME: ${BOOTSTRAP_ADMIN_USERNAME:-}
       BOOTSTRAP_ADMIN_PASSWORD_HASH: ${BOOTSTRAP_ADMIN_PASSWORD_HASH:-}
+    volumes:
+      # Uploaded images; included in the nightly backup
+      - media:/var/lib/burokent/media
     depends_on:
       postgres:
         condition: service_healthy
@@ -133,3 +137,4 @@ networks:
 
 volumes:
   pgdata:
+  media:

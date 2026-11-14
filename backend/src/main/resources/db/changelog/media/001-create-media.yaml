@@ -1,0 +1,115 @@
+databaseChangeLog:
+  - changeSet:
+      id: media-001
+      author: burokent
+      changes:
+        - createTable:
+            tableName: media_assets
+            columns:
+              - column:
+                  name: id
+                  type: bigint
+                  autoIncrement: true
+                  generationType: ALWAYS
+                  constraints:
+                    primaryKey: true
+                    primaryKeyName: media_assets_pkey
+              - column:
+                  name: file_name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: media_assets_file_name_key
+              - column:
+                  name: thumbnail_file_name
+                  type: varchar(64)
+                  constraints:
+                    nullable: false
+                    unique: true
+                    uniqueConstraintName: media_assets_thumbnail_file_name_key
+              - column:
+                  name: content_type
+                  type: varchar(32)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: width
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: height
+                  type: integer
+                  constraints:
+                    nullable: false
+              - column:
+                  name: byte_size
+                  type: bigint
+                  constraints:
+                    nullable: false
+              - column:
+                  name: original_file_name
+                  type: varchar(255)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: created_at
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: updated_at
+                  type: timestamptz
+                  defaultValueComputed: now()
+                  constraints:
+                    nullable: false
+              - column:
+                  name: archived_at
+                  type: timestamptz
+              - column:
+                  name: version
+                  type: bigint
+                  defaultValueNumeric: 0
+                  constraints:
+                    nullable: false
+        - createTable:
+            tableName: media_translations
+            columns:
+              - column:
+                  name: media_id
+                  type: bigint
+                  constraints:
+                    nullable: false
+                    foreignKeyName: media_translations_media_id_fkey
+                    references: media_assets(id)
+              - column:
+                  name: locale
+                  type: varchar(2)
+                  constraints:
+                    nullable: false
+              - column:
+                  name: alt_text
+                  type: varchar(250)
+                  constraints:
+                    nullable: false
+        - addPrimaryKey:
+            tableName: media_translations
+            columnNames: media_id, locale
+            constraintName: media_translations_pkey
+        - sql:
+            sql: >-
+              ALTER TABLE media_translations ADD CONSTRAINT media_translations_locale_check
+              CHECK (locale IN ('tr', 'en', 'ar'))
+        - createIndex:
+            tableName: media_assets
+            indexName: media_assets_created_at_idx
+            columns:
+              - column:
+                  name: created_at
+      rollback:
+        - dropTable:
+            tableName: media_translations
+        - dropTable:
+            tableName: media_assets

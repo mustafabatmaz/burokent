@@ -10,6 +10,7 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 import com.burokent.TestcontainersConfiguration;
 import com.burokent.audit.AuditPermissions;
+import com.burokent.media.MediaPermissions;
 import com.jayway.jsonpath.JsonPath;
 import jakarta.servlet.http.Cookie;
 import java.util.UUID;
@@ -221,11 +222,18 @@ class IdentityManagementTests {
         call(get("/api/admin/me"), manager)
                 .andExpect(jsonPath("$.permissions")
                         .value(org.hamcrest.Matchers.containsInAnyOrder(
-                                AuditPermissions.READ, IdentityPermissions.READ)));
+                                AuditPermissions.READ,
+                                IdentityPermissions.READ,
+                                MediaPermissions.READ,
+                                MediaPermissions.MANAGE)));
         call(get("/api/admin/me"), superAdmin)
                 .andExpect(jsonPath("$.permissions")
                         .value(org.hamcrest.Matchers.containsInAnyOrder(
-                                AuditPermissions.READ, IdentityPermissions.MANAGE, IdentityPermissions.READ)));
+                                AuditPermissions.READ,
+                                IdentityPermissions.MANAGE,
+                                IdentityPermissions.READ,
+                                MediaPermissions.READ,
+                                MediaPermissions.MANAGE)));
     }
 
     private String createUser(@Nullable Long roleId) throws Exception {

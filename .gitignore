@@ -21,6 +21,9 @@ dist/
 .next/
 next-env.d.ts
 
+# Local files of the development backend (uploaded images)
+.local/
+
 # Local preview configuration
 .claude/launch.json
 

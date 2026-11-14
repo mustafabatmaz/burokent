@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# Nightly backup: a dump of the database sent with restic to Backblaze B2. restic encrypts on this server before
+# Nightly backup: a dump of the database and the uploaded images, sent with restic to Backblaze B2. restic encrypts on this server before
 # anything leaves it, uploads only what changed, and keeps 7 daily, 4 weekly, 12 monthly and 5 yearly snapshots.
 # Run by burokent-backup.timer; safe to run by hand any time.
 #
@@ -12,6 +12,8 @@ DUMP_DIR="${BUROKENT_BACKUP_DUMP_DIR:-$HOME/backups/burokent/db}"
 RESTIC_IMAGE="restic/restic:0.19.1"
 # Snapshots are grouped by host when old ones are forgotten; the restic container's own name changes every run
 HOST="burokent-vps"
+# The compose project's image volume (project "burokent", volume "media")
+MEDIA_VOLUME="${BUROKENT_MEDIA_VOLUME:-burokent_media}"
 
 # shellcheck source=/dev/null
 source "$ENV_FILE"
@@ -26,9 +28,17 @@ ping() {
 trap 'ping /fail' ERR
 ping /start
 
+# Mounting a volume that doesn't exist would create an empty one outside compose, so only an existing one is added.
+# The images are read straight from the volume: their names never change, so restic sends only new files
+media_mount=()
+if docker volume inspect "$MEDIA_VOLUME" > /dev/null 2>&1; then
+    media_mount=(-v "$MEDIA_VOLUME:/backup/media:ro")
+fi
+
 restic() {
     docker run --rm --env-file "$ENV_FILE" \
         -v "$DUMP_DIR:/backup/db:ro" \
+        ${media_mount[@]+"${media_mount[@]}"} \
         "$RESTIC_IMAGE" "$@"
 }
 
