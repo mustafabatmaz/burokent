@@ -41,6 +41,21 @@ class ParsersTests {
     }
 
     @Test
+    void readsTheLatestGoldClosingPricePerGramAndTheOneBefore() {
+        Gold gold = EvdsGold.parse(JsonMapper.builder().build(), Fixtures.EVDS_GOLD);
+
+        assertThat(gold.date()).isEqualTo(LocalDate.of(2026, 11, 13));
+        assertThat(gold.perGram()).isEqualByComparingTo("6321.00");
+        assertThat(gold.previousPerGram()).isEqualByComparingTo("6379.00");
+    }
+
+    @Test
+    void refusesAGoldAnswerWithoutAnyPrice() {
+        assertThatThrownBy(() -> EvdsGold.parse(JsonMapper.builder().build(), "{\"totalCount\":0,\"items\":[]}"))
+                .isInstanceOf(FeedException.class);
+    }
+
+    @Test
     void readsTheCurrentWeatherAndDaysInIstanbulTime() {
         Weather weather = MetNoWeather.parse(JsonMapper.builder().build(), Fixtures.MET_NO);
 

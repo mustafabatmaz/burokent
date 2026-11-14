@@ -48,6 +48,8 @@ burokent:
     user-agent: "BuroKentPanel/1.0 https://burokent.com"
     rates-url: https://www.tcmb.gov.tr/kurlar/today.xml
     weather-url: https://api.met.no/weatherapi/locationforecast/2.0/compact
+    # The central bank's EVDS (the key is sent in a header; see EVDS_API_KEY below)
+    gold-url: https://evds3.tcmb.gov.tr/igmevdsms-dis/
     location:
       name: Antakya
       latitude: 36.2025
@@ -70,6 +72,9 @@ burokent:
     jwt-secret: ${JWT_SECRET}
   media:
     root: ${MEDIA_ROOT}
+  dashboard:
+    # Optional: without a key the start page shows no gold price
+    evds-key: ${EVDS_API_KEY:}
 
 ---
 spring:

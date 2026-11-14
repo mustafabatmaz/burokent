@@ -168,6 +168,13 @@ export function initialDashboard() {
         { code: "SAR", buying: "10.6900", selling: "10.7100" },
       ] as { code: string; buying: string; selling: string }[],
     } as { date: string; fetchedAt: string; rates: { code: string; buying: string; selling: string }[] } | undefined,
+    gold: {
+      date: "2026-11-13",
+      perGram: "6321.00",
+      previousPerGram: "6379.00",
+      fetchedAt: "2026-11-14T07:45:00Z",
+    } as { date: string; perGram: string; previousPerGram?: string; fetchedAt: string } | undefined,
+    goldConfigured: true,
     weather: {
       temperature: 15.7,
       symbol: "partlycloudy_day",

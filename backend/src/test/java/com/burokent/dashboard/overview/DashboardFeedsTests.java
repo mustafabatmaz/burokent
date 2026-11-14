@@ -19,6 +19,7 @@ class DashboardFeedsTests {
 
     private static final String TCMB_URL = "https://rates.example/today.xml";
     private static final String WEATHER_URL = "https://weather.example/compact";
+    private static final String GOLD_URL = "https://evds.example/service/";
 
     private final MutableClock clock = new MutableClock(Instant.parse("2026-11-14T08:00:00Z"));
     private MockRestServiceServer server;
@@ -31,6 +32,8 @@ class DashboardFeedsTests {
                 "TestPanel/1.0 https://example.com",
                 TCMB_URL,
                 WEATHER_URL,
+                GOLD_URL,
+                "test-evds-key",
                 new DashboardProperties.Location("Antakya", 36.2025, 36.1606));
         // The production setup first; the mock server then takes over the transport
         RestClient.Builder builder = DashboardFeeds.configure(RestClient.builder(), properties);
@@ -63,6 +66,39 @@ class DashboardFeedsTests {
     }
 
     @Test
+    void asksForTheLastTenDaysOfGoldWithTheKeyInAHeader() {
+        server.expect(requestTo(
+                        GOLD_URL + "series=TP.ALTINPIYASA.KAP02&startDate=04-11-2026&endDate=14-11-2026&type=json"))
+                .andExpect(header("key", "test-evds-key"))
+                .andRespond(withSuccess(Fixtures.EVDS_GOLD, MediaType.APPLICATION_JSON));
+
+        feeds.refreshGold();
+
+        assertThat(feeds.gold())
+                .hasValueSatisfying(
+                        snapshot -> assertThat(snapshot.value().perGram()).isEqualByComparingTo("6321.00"));
+        server.verify();
+    }
+
+    @Test
+    void leavesGoldOutWithoutAKey() {
+        RestClient.Builder builder = RestClient.builder();
+        MockRestServiceServer silent = MockRestServiceServer.bindTo(builder).build();
+        DashboardFeeds noKey = new DashboardFeeds(
+                builder.build(),
+                new DashboardProperties(
+                        true, "x", TCMB_URL, WEATHER_URL, GOLD_URL, " ", new DashboardProperties.Location("A", 0, 0)),
+                JsonMapper.builder().build(),
+                clock);
+
+        noKey.refreshGold();
+
+        assertThat(noKey.gold()).isEmpty();
+        assertThat(noKey.goldConfigured()).isFalse();
+        silent.verify();
+    }
+
+    @Test
     void keepsTheLastGoodValueWhenASourceFails() {
         server.expect(requestTo(TCMB_URL)).andRespond(withSuccess(Fixtures.TCMB, MediaType.APPLICATION_XML));
         server.expect(requestTo(TCMB_URL)).andRespond(withServerError());
@@ -86,7 +122,8 @@ class DashboardFeedsTests {
         MockRestServiceServer silent = MockRestServiceServer.bindTo(builder).build();
         DashboardFeeds off = new DashboardFeeds(
                 builder.build(),
-                new DashboardProperties(false, "x", TCMB_URL, WEATHER_URL, new DashboardProperties.Location("A", 0, 0)),
+                new DashboardProperties(
+                        false, "x", TCMB_URL, WEATHER_URL, GOLD_URL, "k", new DashboardProperties.Location("A", 0, 0)),
                 JsonMapper.builder().build(),
                 clock);
 

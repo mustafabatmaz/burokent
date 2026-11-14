@@ -27,10 +27,16 @@ class DashboardController {
     record WeatherView(
             BigDecimal temperature, String symbol, List<DayView> days, Instant updatedAt, Instant fetchedAt) {}
 
+    record GoldView(
+            LocalDate date, String perGram, @Nullable String previousPerGram, Instant fetchedAt) {}
+
+    /** goldConfigured is false while no EVDS key is set on the server. */
     record DashboardView(
             String location,
             @Nullable RatesView rates,
-            @Nullable WeatherView weather) {}
+            @Nullable WeatherView weather,
+            @Nullable GoldView gold,
+            boolean goldConfigured) {}
 
     @GetMapping("/api/admin/dashboard")
     @PreAuthorize("isAuthenticated()")
@@ -56,6 +62,15 @@ class DashboardController {
                         snapshot.value().updatedAt(),
                         snapshot.fetchedAt()))
                 .orElse(null);
-        return new DashboardView(properties.location().name(), rates, weather);
+        GoldView gold = feeds.gold()
+                .map(snapshot -> new GoldView(
+                        snapshot.value().date(),
+                        snapshot.value().perGram().toPlainString(),
+                        snapshot.value().previousPerGram() == null
+                                ? null
+                                : snapshot.value().previousPerGram().toPlainString(),
+                        snapshot.fetchedAt()))
+                .orElse(null);
+        return new DashboardView(properties.location().name(), rates, weather, gold, feeds.goldConfigured());
     }
 }

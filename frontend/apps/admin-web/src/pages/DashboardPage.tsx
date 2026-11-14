@@ -1,4 +1,5 @@
 import { useQuery } from "@tanstack/react-query";
+import { Minus, TrendingDown, TrendingUp } from "lucide-react";
 import { useSession } from "../auth/session.tsx";
 import { Card } from "../components/ui/card.tsx";
 import { dashboardQuery, type DashboardView } from "../features/dashboard/queries.ts";
@@ -10,6 +11,13 @@ const DATE = new Intl.DateTimeFormat("tr-TR", { day: "numeric", month: "long", y
 const WEEKDAY = new Intl.DateTimeFormat("tr-TR", { weekday: "long", timeZone: "UTC" });
 const TIME = new Intl.DateTimeFormat("tr-TR", { hour: "2-digit", minute: "2-digit", timeZone: ZONE });
 const RATE = new Intl.NumberFormat("tr-TR", { minimumFractionDigits: 4, maximumFractionDigits: 4 });
+const LIRA = new Intl.NumberFormat("tr-TR", { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+const CHANGE = new Intl.NumberFormat("tr-TR", {
+  style: "percent",
+  minimumFractionDigits: 2,
+  maximumFractionDigits: 2,
+  signDisplay: "exceptZero",
+});
 
 /** A calendar date from the API ("2026-11-13"), shown as is, whatever the browser's time zone. */
 function calendarDate(iso: string): Date {
@@ -39,7 +47,10 @@ export function DashboardPage() {
       ) : (
         <div className="grid gap-4 lg:grid-cols-2">
           <RatesCard rates={dashboard.data?.rates} />
-          <WeatherCard location={dashboard.data?.location ?? ""} weather={dashboard.data?.weather} />
+          <GoldCard gold={dashboard.data?.gold} configured={dashboard.data?.goldConfigured ?? false} />
+          <div className="lg:col-span-2">
+            <WeatherCard location={dashboard.data?.location ?? ""} weather={dashboard.data?.weather} />
+          </div>
         </div>
       )}
     </section>
@@ -88,6 +99,39 @@ function RatesCard({ rates }: { rates: DashboardView["rates"] }) {
           <p className="text-muted-foreground">{r.unavailable}</p>
         </>
       )}
+    </Card>
+  );
+}
+
+function GoldCard({ gold, configured }: { gold: DashboardView["gold"]; configured: boolean }) {
+  const g = messages.dashboard.gold;
+  const perGram = gold ? Number(gold.perGram) : 0;
+  const previous = gold?.previousPerGram ? Number(gold.previousPerGram) : undefined;
+  const change = previous ? (perGram - previous) / previous : undefined;
+  const Trend = change === undefined || change === 0 ? Minus : change > 0 ? TrendingUp : TrendingDown;
+
+  return (
+    <Card className="p-6">
+      <section aria-label={g.title} className="flex h-full flex-col gap-4">
+        <h2 className="text-lg font-semibold">{g.title}</h2>
+        {gold ? (
+          <>
+            <div>
+              <p className="text-sm text-muted-foreground">{g.perGram}</p>
+              <p className="text-3xl font-semibold tabular-nums">{LIRA.format(perGram)} ₺</p>
+              {change !== undefined && previous !== undefined && (
+                <p className="mt-1 flex items-center gap-1.5 text-sm text-muted-foreground">
+                  <Trend aria-hidden className="size-4" />
+                  {g.change(CHANGE.format(change), `${LIRA.format(previous)} ₺`)}
+                </p>
+              )}
+            </div>
+            <p className="mt-auto text-xs text-muted-foreground">{g.source(DATE.format(calendarDate(gold.date)))}</p>
+          </>
+        ) : (
+          <p className="text-muted-foreground">{configured ? g.unavailable : g.notConfigured}</p>
+        )}
+      </section>
     </Card>
   );
 }
