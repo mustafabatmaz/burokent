@@ -2,6 +2,10 @@
 # project) reaches the sites over the external "edge" network; PostgreSQL stays on the internal network.
 #   docker compose -f infra/compose.prod.yaml up -d      (or infra/deploy.sh)
 # Memory limits keep this stack, the blog and the image builds within the server's 8 GB.
+#
+# Services on the shared edge network carry the project in their names. Compose makes every service reachable on
+# each of its networks by its service name, so a plain "backend" here would also answer to the blog's "backend"
+# lookups on the edge network (and did: the blog then showed empty pages).
 name: burokent
 
 x-logging: &logging
@@ -37,7 +41,7 @@ services:
           memory: 512m
     logging: *logging
 
-  backend:
+  burokent-backend:
     image: burokent-backend:latest
     build:
       context: ../backend
@@ -68,17 +72,14 @@ services:
       timeout: 5s
       retries: 12
       start_period: 40s
-    networks:
-      internal:
-      edge:
-        aliases: [burokent-backend]
+    networks: [internal, edge]
     deploy:
       resources:
         limits:
           memory: 1g
     logging: *logging
 
-  public-web:
+  burokent-public-web:
     image: burokent-public-web:latest
     build:
       context: ../frontend
@@ -94,17 +95,14 @@ services:
       timeout: 5s
       retries: 3
       start_period: 10s
-    networks:
-      internal:
-      edge:
-        aliases: [burokent-public-web]
+    networks: [internal, edge]
     deploy:
       resources:
         limits:
           memory: 512m
     logging: *logging
 
-  admin-web:
+  burokent-admin-web:
     image: burokent-admin-web:latest
     build:
       context: ../frontend
@@ -114,17 +112,14 @@ services:
         infra: .
     restart: unless-stopped
     depends_on:
-      backend:
+      burokent-backend:
         condition: service_healthy
     healthcheck:
       test: ["CMD", "wget", "-q", "--spider", "http://127.0.0.1:8080/"]
       interval: 10s
       timeout: 5s
       retries: 3
-    networks:
-      internal:
-      edge:
-        aliases: [burokent-admin-web]
+    networks: [internal, edge]
     deploy:
       resources:
         limits:

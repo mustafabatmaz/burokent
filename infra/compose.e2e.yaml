@@ -11,9 +11,9 @@ services:
       - ./e2e/Caddyfile:/etc/caddy/Caddyfile:ro
       - ./caddy:/etc/caddy/sites:ro
     depends_on:
-      public-web:
+      burokent-public-web:
         condition: service_healthy
-      admin-web:
+      burokent-admin-web:
         condition: service_healthy
     networks:
       edge:
