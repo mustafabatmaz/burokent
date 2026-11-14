@@ -156,6 +156,32 @@ function initialAudit(): FakeAuditEvent[] {
   ];
 }
 
+export function initialDashboard() {
+  return {
+    location: "Antakya",
+    rates: {
+      date: "2026-11-13",
+      fetchedAt: "2026-11-14T07:30:00Z",
+      rates: [
+        { code: "USD", buying: "40.1000", selling: "40.2000" },
+        { code: "EUR", buying: "44.5000", selling: "44.6000" },
+        { code: "SAR", buying: "10.6900", selling: "10.7100" },
+      ] as { code: string; buying: string; selling: string }[],
+    } as { date: string; fetchedAt: string; rates: { code: string; buying: string; selling: string }[] } | undefined,
+    weather: {
+      temperature: 15.7,
+      symbol: "partlycloudy_day",
+      updatedAt: "2026-11-14T07:19:19Z",
+      fetchedAt: "2026-11-14T07:40:00Z",
+      days: [
+        { date: "2026-11-14", min: 12.4, max: 19.2, symbol: "cloudy" },
+        { date: "2026-11-15", min: 9.1, max: 17, symbol: "lightrain" },
+        { date: "2026-11-16", min: 8, max: 18.5, symbol: "clearsky_day" },
+      ],
+    } as Record<string, unknown> | undefined,
+  };
+}
+
 /** State of the fake backend; tests change it to simulate expired tokens, sessions and concurrent edits. */
 export const backend = {
   user: null as FakeUser | null,
@@ -167,6 +193,7 @@ export const backend = {
   roles: initialRoles(),
   audit: initialAudit(),
   media: initialMedia(),
+  dashboard: initialDashboard(),
   calls: [] as { method: string; path: string; body?: unknown; query?: string }[],
 };
 
@@ -180,6 +207,7 @@ export function resetBackend(): void {
   backend.roles = initialRoles();
   backend.audit = initialAudit();
   backend.media = initialMedia();
+  backend.dashboard = initialDashboard();
   backend.calls = [];
 }
 
@@ -344,6 +372,7 @@ export const server = setupServer(
     role.version++;
     return HttpResponse.json(role);
   }),
+  http.get("*/api/admin/dashboard", () => HttpResponse.json(backend.dashboard)),
   http.get("*/api/admin/media", ({ request }) => {
     const url = new URL(request.url);
     record("GET", request);
