@@ -147,6 +147,40 @@
         "required" : [ "displayName", "password", "username" ],
         "type" : "object"
       },
+      "DashboardView" : {
+        "properties" : {
+          "location" : {
+            "type" : "string"
+          },
+          "rates" : {
+            "$ref" : "#/components/schemas/RatesView"
+          },
+          "weather" : {
+            "$ref" : "#/components/schemas/WeatherView"
+          }
+        },
+        "required" : [ "location" ],
+        "type" : "object"
+      },
+      "DayView" : {
+        "properties" : {
+          "date" : {
+            "format" : "date",
+            "type" : "string"
+          },
+          "max" : {
+            "type" : "number"
+          },
+          "min" : {
+            "type" : "number"
+          },
+          "symbol" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "date", "max", "min", "symbol" ],
+        "type" : "object"
+      },
       "LoginRequest" : {
         "properties" : {
           "password" : {
@@ -304,6 +338,41 @@
         "required" : [ "code", "delegable" ],
         "type" : "object"
       },
+      "RateView" : {
+        "properties" : {
+          "buying" : {
+            "type" : "string"
+          },
+          "code" : {
+            "type" : "string"
+          },
+          "selling" : {
+            "type" : "string"
+          }
+        },
+        "required" : [ "buying", "code", "selling" ],
+        "type" : "object"
+      },
+      "RatesView" : {
+        "properties" : {
+          "date" : {
+            "format" : "date",
+            "type" : "string"
+          },
+          "fetchedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "rates" : {
+            "items" : {
+              "$ref" : "#/components/schemas/RateView"
+            },
+            "type" : "array"
+          }
+        },
+        "required" : [ "date", "fetchedAt", "rates" ],
+        "type" : "object"
+      },
       "ResetPasswordRequest" : {
         "properties" : {
           "password" : {
@@ -427,6 +496,32 @@
           }
         },
         "required" : [ "archived", "displayName", "id", "superAdmin", "username", "version" ],
+        "type" : "object"
+      },
+      "WeatherView" : {
+        "properties" : {
+          "days" : {
+            "items" : {
+              "$ref" : "#/components/schemas/DayView"
+            },
+            "type" : "array"
+          },
+          "fetchedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          },
+          "symbol" : {
+            "type" : "string"
+          },
+          "temperature" : {
+            "type" : "number"
+          },
+          "updatedAt" : {
+            "format" : "date-time",
+            "type" : "string"
+          }
+        },
+        "required" : [ "days", "fetchedAt", "symbol", "temperature", "updatedAt" ],
         "type" : "object"
       }
     }
@@ -571,6 +666,24 @@
           }
         },
         "tags" : [ "auth-controller" ]
+      }
+    },
+    "/api/admin/dashboard" : {
+      "get" : {
+        "operationId" : "dashboard",
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "$ref" : "#/components/schemas/DashboardView"
+                }
+              }
+            },
+            "description" : "OK"
+          }
+        },
+        "tags" : [ "dashboard-controller" ]
       }
     },
     "/api/admin/me" : {

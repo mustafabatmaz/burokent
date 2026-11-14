@@ -62,6 +62,8 @@ public class TestcontainersConfiguration {
                     "spring.liquibase.parameters.bootstrap_admin_password_hash", () -> BOOTSTRAP_ADMIN_PASSWORD_HASH);
             registry.add("burokent.auth.jwt-secret", () -> JWT_SECRET);
             registry.add("burokent.media.root", () -> mediaRoot.toString());
+            // No test may reach the real exchange-rate or weather services
+            registry.add("burokent.dashboard.enabled", () -> "false");
         };
     }
 }

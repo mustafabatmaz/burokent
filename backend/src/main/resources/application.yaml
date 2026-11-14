@@ -40,6 +40,19 @@ springdoc:
   swagger-ui:
     enabled: false
 
+burokent:
+  # The admin panel's start page: public exchange rates and weather (switched off in tests)
+  dashboard:
+    enabled: true
+    # MET Norway asks every client to name itself; no personal contact details
+    user-agent: "BuroKentPanel/1.0 https://burokent.com"
+    rates-url: https://www.tcmb.gov.tr/kurlar/today.xml
+    weather-url: https://api.met.no/weatherapi/locationforecast/2.0/compact
+    location:
+      name: Antakya
+      latitude: 36.2025
+      longitude: 36.1606
+
 ---
 spring:
   config:

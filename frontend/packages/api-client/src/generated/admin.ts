@@ -81,6 +81,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/dashboard": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["dashboard"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/me": {
         parameters: {
             query?: never;
@@ -385,6 +401,18 @@ export interface components {
             roleId?: number;
             username: string;
         };
+        DashboardView: {
+            location: string;
+            rates?: components["schemas"]["RatesView"];
+            weather?: components["schemas"]["WeatherView"];
+        };
+        DayView: {
+            /** Format: date */
+            date: string;
+            max: number;
+            min: number;
+            symbol: string;
+        };
         LoginRequest: {
             password: string;
             username: string;
@@ -441,6 +469,18 @@ export interface components {
             code: string;
             delegable: boolean;
         };
+        RateView: {
+            buying: string;
+            code: string;
+            selling: string;
+        };
+        RatesView: {
+            /** Format: date */
+            date: string;
+            /** Format: date-time */
+            fetchedAt: string;
+            rates: components["schemas"]["RateView"][];
+        };
         ResetPasswordRequest: {
             password: string;
         };
@@ -483,6 +523,15 @@ export interface components {
             username: string;
             /** Format: int64 */
             version: number;
+        };
+        WeatherView: {
+            days: components["schemas"]["DayView"][];
+            /** Format: date-time */
+            fetchedAt: string;
+            symbol: string;
+            temperature: number;
+            /** Format: date-time */
+            updatedAt: string;
         };
     };
     responses: never;
@@ -595,6 +644,26 @@ export interface operations {
                     [name: string]: unknown;
                 };
                 content?: never;
+            };
+        };
+    };
+    dashboard: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": components["schemas"]["DashboardView"];
+                };
             };
         };
     };
