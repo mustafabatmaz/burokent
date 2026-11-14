@@ -9,9 +9,11 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.RequiredArgsConstructor;
 import org.jspecify.annotations.Nullable;
+import org.springframework.core.io.Resource;
 import org.springframework.data.web.PagedModel;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
+import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -35,7 +37,10 @@ class MediaController {
     private static final int DEFAULT_SIZE = 48;
     private static final int MAX_SIZE = 100;
 
+    static final String FILES_PATH = "/api/admin/media/files/";
+
     private final MediaService media;
+    private final MediaStorage storage;
 
     record AltTexts(
             @Nullable @Size(max = 250) String tr,
@@ -55,10 +60,16 @@ class MediaController {
         }
     }
 
+    /**
+     * {@code url}/{@code thumbnailUrl} are the site's addresses (not served once archived); the preview addresses are
+     * the panel's own and keep working for archived images.
+     */
     record MediaView(
             long id,
             String url,
             String thumbnailUrl,
+            String previewUrl,
+            String previewThumbnailUrl,
             String contentType,
             int width,
             int height,
@@ -74,6 +85,8 @@ class MediaController {
                     asset.getId(),
                     PublicMediaController.PATH + asset.getFileName(),
                     PublicMediaController.PATH + asset.getThumbnailFileName(),
+                    FILES_PATH + asset.getFileName(),
+                    FILES_PATH + asset.getThumbnailFileName(),
                     asset.getContentType(),
                     asset.getWidth(),
                     asset.getHeight(),
@@ -102,6 +115,12 @@ class MediaController {
     @PreAuthorize(READ)
     MediaView get(@PathVariable long id) {
         return MediaView.of(media.get(id));
+    }
+
+    @GetMapping("/files/{fileName}")
+    @PreAuthorize(READ)
+    ResponseEntity<Resource> file(@PathVariable String fileName) {
+        return MediaFiles.respond(fileName, media.findByFile(fileName), storage, MediaFiles.PRIVATE);
     }
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)

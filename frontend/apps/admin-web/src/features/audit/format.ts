@@ -27,6 +27,10 @@ const SENTENCES: Record<string, (context: Context) => string> = {
   "user.sessions_ended": ({ actor, label }) => `${actor}, ${label} kullanıcısının tüm oturumlarını kapattı`,
   "role.created": ({ actor, label }) => `${actor}, “${label}” rolünü oluşturdu`,
   "role.updated": ({ actor, label }) => `${actor}, “${label}” rolünü güncelledi`,
+  "media.uploaded": ({ actor, label }) => `${actor}, “${label}” görselini yükledi`,
+  "media.updated": ({ actor, label }) => `${actor}, “${label}” görselinin alt metinlerini güncelledi`,
+  "media.archived": ({ actor, label }) => `${actor}, “${label}” görselini arşivledi`,
+  "media.unarchived": ({ actor, label }) => `${actor}, “${label}” görselini arşivden çıkardı`,
 };
 
 /** A readable Turkish sentence for an activity entry; unknown actions fall back to the action code. */

@@ -22,7 +22,7 @@ class FileSystemMediaStorage implements MediaStorage {
     private final Path root;
 
     FileSystemMediaStorage(MediaProperties properties) throws IOException {
-        this.root = properties.root().toAbsolutePath().normalize();
+        this.root = Path.of(properties.root()).toAbsolutePath().normalize();
         Files.createDirectories(root);
         if (!Files.isWritable(root)) {
             throw new IllegalStateException("Media directory is not writable: " + root);

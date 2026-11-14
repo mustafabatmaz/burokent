@@ -129,6 +129,22 @@ export interface paths {
         patch?: never;
         trace?: never;
     };
+    "/api/admin/media/files/{fileName}": {
+        parameters: {
+            query?: never;
+            header?: never;
+            path?: never;
+            cookie?: never;
+        };
+        get: operations["file"];
+        put?: never;
+        post?: never;
+        delete?: never;
+        options?: never;
+        head?: never;
+        patch?: never;
+        trace?: never;
+    };
     "/api/admin/media/{id}": {
         parameters: {
             query?: never;
@@ -394,6 +410,8 @@ export interface components {
             /** Format: int64 */
             id: number;
             originalFileName: string;
+            previewThumbnailUrl: string;
+            previewUrl: string;
             thumbnailUrl: string;
             url: string;
             /** Format: int64 */
@@ -669,6 +687,28 @@ export interface operations {
                 };
                 content: {
                     "*/*": components["schemas"]["MediaView"];
+                };
+            };
+        };
+    };
+    file: {
+        parameters: {
+            query?: never;
+            header?: never;
+            path: {
+                fileName: string;
+            };
+            cookie?: never;
+        };
+        requestBody?: never;
+        responses: {
+            /** @description OK */
+            200: {
+                headers: {
+                    [name: string]: unknown;
+                };
+                content: {
+                    "*/*": string;
                 };
             };
         };

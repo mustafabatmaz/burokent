@@ -57,7 +57,13 @@ class MediaService {
     /** A file the site may show: known and not archived. */
     @Transactional(readOnly = true)
     Optional<MediaAsset> findServable(String fileName) {
-        return media.findByFileNameOrThumbnailFileName(fileName, fileName).filter(asset -> !asset.isArchived());
+        return findByFile(fileName).filter(asset -> !asset.isArchived());
+    }
+
+    /** Any known file, archived ones included: the panel still shows them. */
+    @Transactional(readOnly = true)
+    Optional<MediaAsset> findByFile(String fileName) {
+        return media.findByFileNameOrThumbnailFileName(fileName, fileName);
     }
 
     @Transactional
