@@ -216,6 +216,12 @@
           "originalFileName" : {
             "type" : "string"
           },
+          "previewThumbnailUrl" : {
+            "type" : "string"
+          },
+          "previewUrl" : {
+            "type" : "string"
+          },
           "thumbnailUrl" : {
             "type" : "string"
           },
@@ -231,7 +237,7 @@
             "type" : "integer"
           }
         },
-        "required" : [ "altText", "archived", "byteSize", "contentType", "createdAt", "height", "id", "originalFileName", "thumbnailUrl", "url", "version", "width" ],
+        "required" : [ "altText", "archived", "byteSize", "contentType", "createdAt", "height", "id", "originalFileName", "previewThumbnailUrl", "previewUrl", "thumbnailUrl", "url", "version", "width" ],
         "type" : "object"
       },
       "PageMetadata" : {
@@ -678,6 +684,33 @@
               }
             },
             "description" : "Created"
+          }
+        },
+        "tags" : [ "media-controller" ]
+      }
+    },
+    "/api/admin/media/files/{fileName}" : {
+      "get" : {
+        "operationId" : "file",
+        "parameters" : [ {
+          "in" : "path",
+          "name" : "fileName",
+          "required" : true,
+          "schema" : {
+            "type" : "string"
+          }
+        } ],
+        "responses" : {
+          "200" : {
+            "content" : {
+              "*/*" : {
+                "schema" : {
+                  "format" : "binary",
+                  "type" : "string"
+                }
+              }
+            },
+            "description" : "OK"
           }
         },
         "tags" : [ "media-controller" ]

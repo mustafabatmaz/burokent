@@ -149,6 +149,28 @@ class MediaLibraryTests {
     }
 
     @Test
+    void thePanelStillSeesArchivedImages() throws Exception {
+        String body = upload(TestImages.jpeg(50, 50), "b.jpg")
+                .andReturn()
+                .getResponse()
+                .getContentAsString();
+        long id = ((Number) JsonPath.read(body, "$.id")).longValue();
+        String previewUrl = JsonPath.read(body, "$.previewUrl");
+        String previewThumbnailUrl = JsonPath.read(body, "$.previewThumbnailUrl");
+        assertThat(previewUrl).matches("/api/admin/media/files/[0-9a-f-]{36}\\.jpg");
+        assertThat(previewThumbnailUrl).matches("/api/admin/media/files/[0-9a-f-]{36}-400\\.jpg");
+
+        call(post("/api/admin/media/" + id + "/archive")).andExpect(status().isNoContent());
+
+        mvc.perform(get(previewUrl).cookie(superAdmin))
+                .andExpect(status().isOk())
+                .andExpect(header().string("Content-Type", "image/jpeg"))
+                .andExpect(header().string("Cache-Control", "max-age=31536000, private, immutable"));
+        mvc.perform(get(previewThumbnailUrl).cookie(superAdmin)).andExpect(status().isOk());
+        mvc.perform(get(previewUrl)).andExpect(status().isUnauthorized());
+    }
+
+    @Test
     void listShowsTheNewestFirst() throws Exception {
         long older = uploadedId();
         long newer = uploadedId();
